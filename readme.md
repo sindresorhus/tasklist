@@ -72,6 +72,11 @@ Password of the user account for the specified `username`.
 Type: `array`
 
 
+## Related
+
+- [taskkill](https://github.com/sindresorhus/taskkill) - Wrapper for the Windows `taskkill` command
+
+
 ## License
 
 MIT © [Sindre Sorhus](http://sindresorhus.com)
