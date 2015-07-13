@@ -19,6 +19,12 @@ module.exports = function (opts, cb) {
 		args.push('/s', opts.system, '/u', opts.username, '/p', opts.password);
 	}
 
+	if (Array.isArray(opts.filter) && opts.filter.length) {
+		opts.filter.forEach(function (el) {
+			args.push('/fi', el);
+		});
+	}
+
 	childProcess.execFile('tasklist', args, function (err, stdout) {
 		if (err) {
 			cb(err);
