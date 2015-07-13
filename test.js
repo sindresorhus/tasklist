@@ -14,3 +14,17 @@ test(function (t) {
 		t.assert(typeof d.memUsage === 'number');
 	});
 });
+
+test(function (t) {
+	t.plan(5);
+
+	tasklist({filter: ['status ne running']}, function (err, data) {
+		t.assert(!err, err);
+		t.assert(data.length > 0);
+		console.log(data);
+		var d = data[0];
+		t.assert(d.imageName.length > 0);
+		t.assert(typeof d.pid === 'number');
+		t.assert(typeof d.memUsage === 'number');
+	});
+});
