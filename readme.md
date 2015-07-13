@@ -69,7 +69,7 @@ Password of the user account for the specified `username`.
 
 Type: `array`
 
-Specifiy the types of processes to include or exclude. See [this](https://technet.microsoft.com/en-us/library/bb491010.aspx) for more information about filters.
+Specify the types of processes to include or exclude. [More info.](https://technet.microsoft.com/en-us/library/bb491010.aspx)
 
 #### callback(error, data)
 
