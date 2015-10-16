@@ -15,9 +15,9 @@ $ npm install --save tasklist
 ## Usage
 
 ```js
-var tasklist = require('tasklist');
+const tasklist = require('tasklist');
 
-tasklist(function (err, data) {
+tasklist().then(data => {
 	console.log(data);
 	/*
 	[{
@@ -41,7 +41,9 @@ tasklist(function (err, data) {
 See the [`tasklist` docs](https://technet.microsoft.com/en-us/library/bb491010.aspx) for more.
 
 
-### tasklist([options], callback)
+### tasklist([options])
+
+Returns a promise that resolves to an array containing the running tasks.
 
 #### options
 
@@ -70,12 +72,6 @@ Password of the user account for the specified `username`.
 Type: `array`
 
 Specify the types of processes to include or exclude. [More info.](https://technet.microsoft.com/en-us/library/bb491010.aspx)
-
-#### callback(error, data)
-
-##### data
-
-Type: `array`
 
 
 ## Related

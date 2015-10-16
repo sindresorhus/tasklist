@@ -3,10 +3,9 @@ var test = require('ava');
 var tasklist = require('./');
 
 test(function (t) {
-	t.plan(5);
+	t.plan(4);
 
-	tasklist(function (err, data) {
-		t.assert(!err, err);
+	tasklist().then(function (data) {
 		t.assert(data.length > 0);
 		var d = data[0];
 		t.assert(d.imageName.length > 0);
@@ -16,10 +15,9 @@ test(function (t) {
 });
 
 test(function (t) {
-	t.plan(5);
+	t.plan(4);
 
-	tasklist({filter: ['status ne running']}, function (err, data) {
-		t.assert(!err, err);
+	tasklist({filter: ['status ne running']}).then(function (data) {
 		t.assert(data.length > 0);
 		var d = data[0];
 		t.assert(d.imageName.length > 0);
