@@ -43,7 +43,7 @@ See the [`tasklist` docs](https://technet.microsoft.com/en-us/library/bb491010.a
 
 ### tasklist([options])
 
-Returns a promise that resolves to an array containing the running tasks.
+Returns a promise for an array of running tasks.
 
 #### options
 

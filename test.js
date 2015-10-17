@@ -1,7 +1,7 @@
 import test from 'ava';
 import fn from './';
 
-test(async t => {
+test('main', async t => {
 	const data = await fn();
 
 	t.true(data.length > 0);
@@ -11,7 +11,7 @@ test(async t => {
 	t.is(typeof d.memUsage, 'number');
 });
 
-test(async t => {
+test('filter option', async t => {
 	const data = await fn({filter: ['status ne running']});
 
 	t.true(data.length > 0);

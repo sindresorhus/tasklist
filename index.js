@@ -6,11 +6,11 @@ var pify = require('pify');
 var Promise = require('pinkie-promise');
 
 module.exports = function (opts) {
-	opts = opts || {};
-
 	if (process.platform !== 'win32') {
-		throw new Error('Windows only');
+		return Promise.reject(new Error('Windows only'));
 	}
+
+	opts = opts || {};
 
 	var args = ['/v', '/nh', '/fo', 'CSV'];
 
