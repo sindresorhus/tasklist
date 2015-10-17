@@ -41,7 +41,7 @@
     "xo": "*"
   },
   "xo": {
-    "ignore": [
+    "ignores": [
       "test.js"
     ]
   }
