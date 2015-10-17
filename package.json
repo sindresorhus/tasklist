@@ -13,7 +13,7 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "node test.js"
+    "test": "xo && ava"
   },
   "files": [
     "index.js"
@@ -32,9 +32,17 @@
   ],
   "dependencies": {
     "neat-csv": "^1.0.0",
+    "pify": "^2.2.0",
+    "pinkie-promise": "^1.0.0",
     "sec": "^1.0.0"
   },
   "devDependencies": {
-    "ava": "0.0.4"
+    "ava": "*",
+    "xo": "*"
+  },
+  "xo": {
+    "ignore": [
+      "test.js"
+    ]
   }
 }

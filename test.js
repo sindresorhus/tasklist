@@ -1,29 +1,22 @@
-'use strict';
-var test = require('ava');
-var tasklist = require('./');
+import test from 'ava';
+import fn from './';
 
-test(function (t) {
-	t.plan(5);
+test(async t => {
+	const data = await fn();
 
-	tasklist(function (err, data) {
-		t.assert(!err, err);
-		t.assert(data.length > 0);
-		var d = data[0];
-		t.assert(d.imageName.length > 0);
-		t.assert(typeof d.pid === 'number');
-		t.assert(typeof d.memUsage === 'number');
-	});
+	t.true(data.length > 0);
+	const d = data[0];
+	t.true(d.imageName.length > 0);
+	t.is(typeof d.pid, 'number');
+	t.is(typeof d.memUsage, 'number');
 });
 
-test(function (t) {
-	t.plan(5);
+test(async t => {
+	const data = await fn({filter: ['status ne running']});
 
-	tasklist({filter: ['status ne running']}, function (err, data) {
-		t.assert(!err, err);
-		t.assert(data.length > 0);
-		var d = data[0];
-		t.assert(d.imageName.length > 0);
-		t.assert(typeof d.pid === 'number');
-		t.assert(typeof d.memUsage === 'number');
-	});
+	t.true(data.length > 0);
+	const d = data[0];
+	t.true(d.imageName.length > 0);
+	t.is(typeof d.pid, 'number');
+	t.is(typeof d.memUsage, 'number');
 });

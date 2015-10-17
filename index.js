@@ -2,15 +2,14 @@
 var childProcess = require('child_process');
 var neatCsv = require('neat-csv');
 var sec = require('sec');
+var pify = require('pify');
+var Promise = require('pinkie-promise');
 
-module.exports = function (opts, cb) {
+module.exports = function (opts) {
+	opts = opts || {};
+
 	if (process.platform !== 'win32') {
 		throw new Error('Windows only');
-	}
-
-	if (typeof opts !== 'object') {
-		cb = opts;
-		opts = {};
 	}
 
 	var args = ['/v', '/nh', '/fo', 'CSV'];
@@ -25,13 +24,8 @@ module.exports = function (opts, cb) {
 		});
 	}
 
-	childProcess.execFile('tasklist', args, function (err, stdout) {
-		if (err) {
-			cb(err);
-			return;
-		}
-
-		neatCsv(stdout, {
+	return pify(childProcess.execFile, Promise)('tasklist', args).then(function (stdout) {
+		return pify(neatCsv, Promise)(stdout, {
 			headers: [
 				'imageName',
 				'pid',
@@ -43,13 +37,8 @@ module.exports = function (opts, cb) {
 				'cpuTime',
 				'windowTitle'
 			]
-		}, function (err, data) {
-			if (err) {
-				cb(err);
-				return;
-			}
-
-			data = data.map(function (el) {
+		}).then(function (data) {
+			return data.map(function (el) {
 				Object.keys(el).forEach(function (key) {
 					if (el[key] === 'N/A') {
 						el[key] = null;
@@ -63,8 +52,6 @@ module.exports = function (opts, cb) {
 
 				return el;
 			});
-
-			cb(null, data);
 		});
 	});
 };
