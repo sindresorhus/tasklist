@@ -49,7 +49,6 @@ module.exports = function (opts) {
 				el.sessionNumber = Number(el.sessionNumber);
 				el.memUsage = Number(el.memUsage.replace(/[^\d]/g, '')) * 1024;
 				el.cpuTime = sec(el.cpuTime);
-
 				return el;
 			});
 		});
