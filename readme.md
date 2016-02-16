@@ -27,7 +27,7 @@ tasklist().then(data => {
 		sessionNumber: 1,
 		memUsage: 4415488,  // bytes
 		status: 'Running',
-		username: 'SINDRESORHU3930\\sindre
+		username: 'SINDRESORHU3930\\sindre'
 		cpuTime: 0,  // seconds
 		windowTitle: 'Task Host Window'
 	}, ...]
@@ -47,19 +47,22 @@ Returns a promise for an array of running tasks.
 
 #### options
 
-The `system`, `username`, `password` options are mutually inclusive.
+Type: `object`
+
+The `system`, `username`, `password` options must be specified together.
 
 ##### system
 
 Type: `string`
 
-Name or IP address of a remote computer (do not use backslashes). The default is the local computer.
+Name or IP address of a remote computer (don't use backslashes). The default is the local computer.
 
 ##### username
 
-Type: `string`
+Type: `string`<br>
+Example: `SINDRESORHU3930\\sindre`
 
-User specified by User or Domain\User. The default is the permissions of the current logged on user on the computer issuing the command.
+User specified by `User` or `Domain\User`. The default is the permissions of the current logged on user on the computer issuing the command.
 
 ##### password
 
