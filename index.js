@@ -18,26 +18,41 @@ module.exports = function (opts) {
 		args.push('/s', opts.system, '/u', opts.username, '/p', opts.password);
 	}
 
-	if (Array.isArray(opts.filter) && opts.filter.length) {
+	if (opts.apps) {
+		args.push('/apps');
+	}
+
+	if (Array.isArray(opts.filter)) {
 		opts.filter.forEach(function (el) {
 			args.push('/fi', el);
 		});
 	}
 
-	return pify(childProcess.execFile, Promise)('tasklist', args).then(function (stdout) {
-		return pify(neatCsv, Promise)(stdout, {
-			headers: [
-				'imageName',
-				'pid',
-				'sessionName',
-				'sessionNumber',
+	if (opts.filter instanceof String) {
+		args.push('/fi', opts.filter);
+	}
+
+	var headerNames = [
+		'imageName',
+		'pid',
+		'sessionName',
+		'sessionNumber'
+	];
+
+	if (opts.verbose) {
+		headerNames = headerNames.concat(
+			[
 				'memUsage',
 				'status',
 				'username',
 				'cpuTime',
 				'windowTitle'
 			]
-		}).then(function (data) {
+		);
+	}
+
+	return pify(childProcess.execFile, Promise)('tasklist', args).then(function (stdout) {
+		return pify(neatCsv, Promise)(stdout, {headers: headerNames}).then(function (data) {
 			return data.map(function (el) {
 				Object.keys(el).forEach(function (key) {
 					if (el[key] === 'N/A') {
@@ -47,8 +62,10 @@ module.exports = function (opts) {
 
 				el.pid = Number(el.pid);
 				el.sessionNumber = Number(el.sessionNumber);
-				el.memUsage = Number(el.memUsage.replace(/[^\d]/g, '')) * 1024;
-				el.cpuTime = sec(el.cpuTime);
+				if (opts.verbose) {
+					el.memUsage = Number(el.memUsage.replace(/[^\d]/g, '')) * 1024;
+					el.cpuTime = sec(el.cpuTime);
+				}
 				return el;
 			});
 		});
