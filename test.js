@@ -1,14 +1,35 @@
 import test from 'ava';
 import fn from './';
 
+const hasDefaultTaskProps = (t, d) => {
+	t.is(typeof d.imageName, 'string');
+	t.is(typeof d.pid, 'number');
+	t.is(typeof d.sessionName, 'string');
+	t.is(typeof d.sessionNumber, 'number');
+	t.is(typeof d.memUsage, 'number');
+};
+
+const hasNonVerboseTaskProps = (t, d) => {
+	t.is(d.status, undefined);
+	t.is(d.username, undefined);
+	t.is(d.cpuTime, undefined);
+	t.is(d.windowTitle, undefined);
+};
+
+const hasVerboseTaskProps = (t, d) => {
+	t.is(typeof d.status, 'string');
+	t.is(typeof d.username, 'string');
+	t.is(typeof d.cpuTime, 'number');
+	t.is(typeof d.windowTitle, 'string');
+};
+
 test('main', async t => {
 	const data = await fn();
 
 	t.true(data.length > 0);
 	const d = data[0];
-	t.true(d.imageName.length > 0);
-	t.is(typeof d.pid, 'number');
-	t.is(d.memUsage, undefined);
+	hasDefaultTaskProps(t, d);
+	hasNonVerboseTaskProps(t, d);
 });
 
 test('verbose option', async t => {
@@ -16,9 +37,8 @@ test('verbose option', async t => {
 
 	t.true(data.length > 0);
 	const d = data[0];
-	t.true(d.imageName.length > 0);
-	t.is(typeof d.pid, 'number');
-	t.is(typeof d.memUsage, 'number');
+	hasDefaultTaskProps(t, d);
+	hasVerboseTaskProps(t, d);
 });
 
 test('filter option (array)', async t => {
@@ -26,17 +46,7 @@ test('filter option (array)', async t => {
 
 	t.true(data.length > 0);
 	const d = data[0];
-	t.true(d.imageName.length > 0);
-	t.is(typeof d.pid, 'number');
-});
-
-test('filter option (string)', async t => {
-	const data = await fn({filter: 'status eq running'});
-
-	t.true(data.length > 0);
-	const d = data[0];
-	t.true(d.imageName.length > 0);
-	t.is(typeof d.pid, 'number');
+	hasDefaultTaskProps(t, d);
 });
 
 test('apps option', async () => {

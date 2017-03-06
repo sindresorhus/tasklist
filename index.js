@@ -28,21 +28,17 @@ module.exports = function (opts) {
 		});
 	}
 
-	if (opts.filter instanceof String) {
-		args.push('/fi', opts.filter);
-	}
-
 	var headerNames = [
 		'imageName',
 		'pid',
 		'sessionName',
-		'sessionNumber'
+		'sessionNumber',
+		'memUsage'
 	];
 
 	if (opts.verbose) {
 		headerNames = headerNames.concat(
 			[
-				'memUsage',
 				'status',
 				'username',
 				'cpuTime',
@@ -62,8 +58,8 @@ module.exports = function (opts) {
 
 				el.pid = Number(el.pid);
 				el.sessionNumber = Number(el.sessionNumber);
+				el.memUsage = Number(el.memUsage.replace(/[^\d]/g, '')) * 1024;
 				if (opts.verbose) {
-					el.memUsage = Number(el.memUsage.replace(/[^\d]/g, '')) * 1024;
 					el.cpuTime = sec(el.cpuTime);
 				}
 				return el;

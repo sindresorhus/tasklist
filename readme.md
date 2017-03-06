@@ -24,7 +24,8 @@ tasklist().then(data => {
 		imageName: 'taskhostex.exe',
 		pid: 1820,
 		sessionName: 'Console',
-		sessionNumber: 1
+		sessionNumber: 1,
+		memUsage: 4415488,  // bytes
 	}, ...]
 	*/
 });
@@ -49,23 +50,47 @@ The `system`, `username`, `password` options must be specified together.
 ##### verbose
 
 Type: `boolean`
+Default: `false`
 
-Return verbose results (default: `false`).
+Return verbose results.
 
 Without the `verbose` option, `taskkill` returns tasks with the following properties:
 
-- `imageName`
-- `pid`
-- `sessionName`
-- `sessionNumber`
+- `imageName` (Type: `string`)
+- `pid` (Type: `number`)
+- `sessionName` (Type: `string`)
+- `sessionNumber` (Type: `number`)
+- `memUsage` in bytes (Type: `number`)
 
 With the `verbose` option set to `true`, it additionally returns the following properties:
 
-- `memUsage`
-- `status`
-- `username`
-- `cpuTime`
-- `windowTitle`
+- `status` (Type: `string`): one of `Running`, `Suspended`, `Not Responding`, or `Unknown`
+- `username` (Type: `string`)
+- `cpuTime` in seconds (Type: `number`)
+- `windowTitle` (Type: `string`)
+
+**Verbose Example:**
+
+```js
+const tasklist = require('tasklist');
+
+tasklist({verbose: true}).then(data => {
+	console.log(data);
+	/*
+	[{
+		imageName: 'taskhostex.exe',
+		pid: 1820,
+		sessionName: 'Console',
+		sessionNumber: 1,
+		memUsage: 4415488,  // bytes
+		status: 'Running',
+		username: 'SINDRESORHU3930\\sindre'
+		cpuTime: 0,  // seconds
+		windowTitle: 'Task Host Window'
+	}, ...]
+	*/
+});
+```
 
 **Warning:** Using the `verbose` option may have a considerable performance impact (see: [/issues/6](https://github.com/sindresorhus/tasklist/issues/6)).
 
@@ -90,15 +115,16 @@ Password of the user account for the specified `username`.
 
 ##### filter
 
-Type: `string` or `array`
+Type: `array`
 
 Specify the types of processes to include or exclude. [More info.](https://technet.microsoft.com/en-us/library/bb491010.aspx)
 
 ##### apps
 
 Type: `boolean`
+Default: `false`
 
-Return only Windows Store Apps (default: `false`).
+Return only Windows Store Apps.
 
 ## Related
 
