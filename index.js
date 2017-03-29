@@ -18,10 +18,6 @@ module.exports = function (opts) {
 		args.push('/s', opts.system, '/u', opts.username, '/p', opts.password);
 	}
 
-	if (opts.apps) {
-		args.push('/apps');
-	}
-
 	if (Array.isArray(opts.filter)) {
 		opts.filter.forEach(function (el) {
 			args.push('/fi', el);

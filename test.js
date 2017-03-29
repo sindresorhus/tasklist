@@ -48,7 +48,3 @@ test('filter option (array)', async t => {
 	const d = data[0];
 	hasDefaultTaskProps(t, d);
 });
-
-test('apps option', async () => {
-	await fn({apps: true});
-});
