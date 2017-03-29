@@ -1,4 +1,5 @@
 import test from 'ava';
+import * as isCI from 'is-ci';
 import fn from './';
 
 const hasDefaultTaskProps = (t, d) => {
@@ -20,7 +21,9 @@ const hasVerboseTaskProps = (t, d) => {
 	t.is(typeof d.status, 'string');
 	t.is(typeof d.username, 'string');
 	t.is(typeof d.cpuTime, 'number');
-	t.is(typeof d.windowTitle, 'string');
+	if (!isCI) {
+		t.is(typeof d.windowTitle, 'string');
+	}
 };
 
 test('main', async t => {

@@ -38,6 +38,7 @@
   },
   "devDependencies": {
     "ava": "*",
+    "is-ci": "^1.0.10",
     "xo": "*"
   }
 }
