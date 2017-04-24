@@ -1,53 +1,47 @@
-import test from 'ava';
-import * as isCI from 'is-ci';
-import fn from './';
+const test = require('ava');
+const tasklist = require('./');
 
-const hasDefaultTaskProps = (t, d) => {
-	t.is(typeof d.imageName, 'string');
-	t.is(typeof d.pid, 'number');
-	t.is(typeof d.sessionName, 'string');
-	t.is(typeof d.sessionNumber, 'number');
-	t.is(typeof d.memUsage, 'number');
+const hasDefaultTaskProps = (t, task) => {
+	t.is(typeof task.imageName, 'string');
+	t.is(typeof task.pid, 'number');
+	t.is(typeof task.sessionName, 'string');
+	t.is(typeof task.sessionNumber, 'number');
+	t.is(typeof task.memUsage, 'number');
 };
 
-const hasNonVerboseTaskProps = (t, d) => {
-	t.is(d.status, undefined);
-	t.is(d.username, undefined);
-	t.is(d.cpuTime, undefined);
-	t.is(d.windowTitle, undefined);
+const hasNonVerboseTaskProps = (t, task) => {
+	t.is(task.status, undefined);
+	t.is(task.username, undefined);
+	t.is(task.cpuTime, undefined);
+	t.is(task.windowTitle, undefined);
 };
 
-const hasVerboseTaskProps = (t, d) => {
-	t.is(typeof d.status, 'string');
-	t.is(typeof d.username, 'string');
-	t.is(typeof d.cpuTime, 'number');
-	if (!isCI) {
-		t.is(typeof d.windowTitle, 'string');
-	}
+const hasVerboseTaskProps = (t, task) => {
+	t.is(typeof task.status, 'string');
+	t.is(typeof task.username, 'string');
+	t.is(typeof task.cpuTime, 'number');
+	t.is(typeof task.windowTitle, 'string');
 };
 
-test('main', async t => {
-	const data = await fn();
+const makeTest = (options, t) => {
+	return tasklist(options).then(tasks => {
+		t.true(tasks.length > 0);
+		tasks.forEach(task => {
+			hasDefaultTaskProps(t, task);
+			if (options.verbose) {
+				hasVerboseTaskProps(t, task);
+			} else {
+				hasNonVerboseTaskProps(t, task);
+			}
+		});
+	});
+};
 
-	t.true(data.length > 0);
-	const d = data[0];
-	hasDefaultTaskProps(t, d);
-	hasNonVerboseTaskProps(t, d);
-});
+test('default', t =>
+	makeTest({}, t));
 
-test('verbose option', async t => {
-	const data = await fn({verbose: true});
+test('verbose option', t =>
+	makeTest({verbose: true}, t));
 
-	t.true(data.length > 0);
-	const d = data[0];
-	hasDefaultTaskProps(t, d);
-	hasVerboseTaskProps(t, d);
-});
-
-test('filter option (array)', async t => {
-	const data = await fn({filter: ['status eq running', 'username ne F4k3U53RN4M3']});
-
-	t.true(data.length > 0);
-	const d = data[0];
-	hasDefaultTaskProps(t, d);
-});
+test('filter option', t =>
+	makeTest({filter: ['status eq running', 'username ne F4k3U53RN4M3']}, t));

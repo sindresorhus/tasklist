@@ -10,10 +10,10 @@
     "url": "sindresorhus.com"
   },
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=4.0.0"
   },
   "scripts": {
-    "test": "xo && ava"
+    "test": "xo --fix && ava --verbose"
   },
   "files": [
     "index.js"
@@ -31,14 +31,13 @@
     "services"
   ],
   "dependencies": {
-    "neat-csv": "^1.0.0",
+    "neat-csv": "^2.1.0",
     "pify": "^2.2.0",
     "pinkie-promise": "^2.0.0",
     "sec": "^1.0.0"
   },
   "devDependencies": {
-    "ava": "*",
-    "is-ci": "^1.0.10",
-    "xo": "*"
+    "ava": "^0.19.1",
+    "xo": "^0.18.1"
   }
 }

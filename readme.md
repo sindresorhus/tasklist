@@ -69,6 +69,8 @@ With the `verbose` option set to `true`, it additionally returns the following p
 - `cpuTime` in seconds (Type: `number`)
 - `windowTitle` (Type: `string`)
 
+**Note:** It is not guaranteed that the `username` and `windowTitle` properties are returned with proper values. If they are *not available*, `'N/A'` may be returned on English Windows systems. (In contrast, `'Nicht zutreffend'` may be returned on German Windows systems, for example.)
+
 **Verbose Example:**
 
 ```js
