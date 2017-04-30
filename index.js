@@ -8,16 +8,18 @@ module.exports = opts => {
 		return Promise.reject(new Error('Windows only'));
 	}
 
-	const options = opts || {};
+	opts = opts || {};
 
 	const args = ['/v', '/nh', '/fo', 'csv'];
 
-	if (options.system && options.username && options.password) {
-		args.push('/s', options.system, '/u', options.username, '/p', options.password);
+	if (opts.system && opts.username && opts.password) {
+		args.push('/s', opts.system, '/u', opts.username, '/p', opts.password);
 	}
 
-	if (Array.isArray(options.filter)) {
-		options.filter.forEach(fi => args.push('/fi', fi));
+	if (Array.isArray(opts.filter)) {
+		for (const filter of opts.filter) {
+			args.push('/fi', filter);
+		}
 	}
 
 	const defaultHeaders = [
@@ -35,7 +37,7 @@ module.exports = opts => {
 		'windowTitle'
 	]);
 
-	const headers = options.verbose ? verboseHeaders : defaultHeaders;
+	const headers = opts.verbose ? verboseHeaders : defaultHeaders;
 
 	return pify(childProcess.execFile)('tasklist', args)
 		.then(stdout => neatCsv(stdout, {headers}))
@@ -44,7 +46,7 @@ module.exports = opts => {
 			task.pid = Number(task.pid);
 			task.sessionNumber = Number(task.sessionNumber);
 			task.memUsage = Number(task.memUsage.replace(/[^\d]/g, '')) * 1024;
-			if (options.verbose) {
+			if (opts.verbose) {
 				task.cpuTime = sec(task.cpuTime);
 			}
 			return task;

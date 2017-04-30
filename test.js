@@ -1,5 +1,5 @@
-const test = require('ava');
-const tasklist = require('./');
+import test from 'ava';
+import tasklist from './';
 
 const hasDefaultTaskProps = (t, task) => {
 	t.is(typeof task.imageName, 'string');
@@ -23,25 +23,19 @@ const hasVerboseTaskProps = (t, task) => {
 	t.is(typeof task.windowTitle, 'string');
 };
 
-const makeTest = (options, t) => {
-	return tasklist(options).then(tasks => {
-		t.true(tasks.length > 0);
-		tasks.forEach(task => {
-			hasDefaultTaskProps(t, task);
-			if (options.verbose) {
-				hasVerboseTaskProps(t, task);
-			} else {
-				hasNonVerboseTaskProps(t, task);
-			}
-		});
-	});
+const macro = async (t, options) => {
+	const tasks = await tasklist(options);
+	t.true(tasks.length > 0);
+	for (const task of tasks) {
+		hasDefaultTaskProps(t, task);
+		if (options.verbose) {
+			hasVerboseTaskProps(t, task);
+		} else {
+			hasNonVerboseTaskProps(t, task);
+		}
+	}
 };
 
-test('default', t =>
-	makeTest({}, t));
-
-test('verbose option', t =>
-	makeTest({verbose: true}, t));
-
-test('filter option', t =>
-	makeTest({filter: ['status eq running', 'username ne F4k3U53RN4M3']}, t));
+test('default', macro, {});
+test('verbose option', macro, {verbose: true});
+test('filter option', macro, {filter: ['status eq running', 'username ne F4k3U53RN4M3']});
