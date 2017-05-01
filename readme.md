@@ -126,6 +126,12 @@ Specify the types of processes to include or exclude. [More info.](https://techn
 - [taskkill](https://github.com/sindresorhus/taskkill) - Wrapper for the Windows `taskkill` command
 
 
+## Maintainers
+
+- [Sindre Sorhus](https://sindresorhus.com)
+- [Mark Tiedemann](https://marksweb.site)
+
+
 ## License
 
-MIT © [Sindre Sorhus](https://sindresorhus.com)
+MIT
