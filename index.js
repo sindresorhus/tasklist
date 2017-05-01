@@ -1,3 +1,4 @@
+'use strict';
 const childProcess = require('child_process');
 const pify = require('pify');
 const neatCsv = require('neat-csv');
@@ -13,7 +14,11 @@ module.exports = opts => {
 	const args = ['/v', '/nh', '/fo', 'csv'];
 
 	if (opts.system && opts.username && opts.password) {
-		args.push('/s', opts.system, '/u', opts.username, '/p', opts.password);
+		args.push(
+			'/s', opts.system,
+			'/u', opts.username,
+			'/p', opts.password
+		);
 	}
 
 	if (Array.isArray(opts.filter)) {
@@ -46,9 +51,11 @@ module.exports = opts => {
 			task.pid = Number(task.pid);
 			task.sessionNumber = Number(task.sessionNumber);
 			task.memUsage = Number(task.memUsage.replace(/[^\d]/g, '')) * 1024;
+
 			if (opts.verbose) {
 				task.cpuTime = sec(task.cpuTime);
 			}
+
 			return task;
 		}));
 };

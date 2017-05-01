@@ -33,7 +33,6 @@
   "dependencies": {
     "neat-csv": "^2.1.0",
     "pify": "^2.2.0",
-    "pinkie-promise": "^2.0.0",
     "sec": "^1.0.0"
   },
   "devDependencies": {

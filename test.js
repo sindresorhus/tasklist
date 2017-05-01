@@ -1,5 +1,5 @@
 import test from 'ava';
-import tasklist from './';
+import tasklist from '.';
 
 const hasDefaultTaskProps = (t, task) => {
 	t.is(typeof task.imageName, 'string');
@@ -25,9 +25,12 @@ const hasVerboseTaskProps = (t, task) => {
 
 const macro = async (t, options) => {
 	const tasks = await tasklist(options);
+
 	t.true(tasks.length > 0);
+
 	for (const task of tasks) {
 		hasDefaultTaskProps(t, task);
+
 		if (options.verbose) {
 			hasVerboseTaskProps(t, task);
 		} else {
