@@ -10,7 +10,7 @@
     "url": "sindresorhus.com"
   },
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=4"
   },
   "scripts": {
     "test": "xo && ava"
@@ -31,7 +31,7 @@
     "services"
   ],
   "dependencies": {
-    "neat-csv": "^1.0.0",
+    "neat-csv": "^2.1.0",
     "pify": "^2.2.0",
     "pinkie-promise": "^2.0.0",
     "sec": "^1.0.0"

@@ -26,10 +26,6 @@ tasklist().then(data => {
 		sessionName: 'Console',
 		sessionNumber: 1,
 		memUsage: 4415488,  // bytes
-		status: 'Running',
-		username: 'SINDRESORHU3930\\sindre'
-		cpuTime: 0,  // seconds
-		windowTitle: 'Task Host Window'
 	}, ...]
 	*/
 });
@@ -50,6 +46,55 @@ Returns a promise for an array of running tasks.
 Type: `object`
 
 The `system`, `username`, `password` options must be specified together.
+
+##### verbose
+
+Type: `boolean`
+Default: `false`
+
+Return verbose results.
+
+Without the `verbose` option, `taskkill` returns tasks with the following properties:
+
+- `imageName` (Type: `string`)
+- `pid` (Type: `number`)
+- `sessionName` (Type: `string`)
+- `sessionNumber` (Type: `number`)
+- `memUsage` in bytes (Type: `number`)
+
+With the `verbose` option set to `true`, it additionally returns the following properties:
+
+- `status` (Type: `string`): one of `Running`, `Suspended`, `Not Responding`, or `Unknown`
+- `username` (Type: `string`)
+- `cpuTime` in seconds (Type: `number`)
+- `windowTitle` (Type: `string`)
+
+**Note:** It is not guaranteed that the `username` and `windowTitle` properties are returned with proper values. If they are *not available*, `'N/A'` may be returned on English Windows systems. (In contrast, `'Nicht zutreffend'` may be returned on German Windows systems, for example.)
+
+**Verbose Example:**
+
+```js
+const tasklist = require('tasklist');
+
+tasklist({verbose: true}).then(data => {
+	console.log(data);
+	/*
+	[{
+		imageName: 'taskhostex.exe',
+		pid: 1820,
+		sessionName: 'Console',
+		sessionNumber: 1,
+		memUsage: 4415488,  // bytes
+		status: 'Running',
+		username: 'SINDRESORHU3930\\sindre'
+		cpuTime: 0,  // seconds
+		windowTitle: 'Task Host Window'
+	}, ...]
+	*/
+});
+```
+
+**Warning:** Using the `verbose` option may have a considerable performance impact (see: [/issues/6](https://github.com/sindresorhus/tasklist/issues/6)).
 
 ##### system
 

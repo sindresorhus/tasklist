@@ -1,22 +1,41 @@
 import test from 'ava';
-import fn from './';
+import tasklist from './';
 
-test('main', async t => {
-	const data = await fn();
+const hasDefaultTaskProps = (t, task) => {
+	t.is(typeof task.imageName, 'string');
+	t.is(typeof task.pid, 'number');
+	t.is(typeof task.sessionName, 'string');
+	t.is(typeof task.sessionNumber, 'number');
+	t.is(typeof task.memUsage, 'number');
+};
 
-	t.true(data.length > 0);
-	const d = data[0];
-	t.true(d.imageName.length > 0);
-	t.is(typeof d.pid, 'number');
-	t.is(typeof d.memUsage, 'number');
-});
+const hasNonVerboseTaskProps = (t, task) => {
+	t.is(task.status, undefined);
+	t.is(task.username, undefined);
+	t.is(task.cpuTime, undefined);
+	t.is(task.windowTitle, undefined);
+};
 
-test('filter option', async t => {
-	const data = await fn({filter: ['status ne running']});
+const hasVerboseTaskProps = (t, task) => {
+	t.is(typeof task.status, 'string');
+	t.is(typeof task.username, 'string');
+	t.is(typeof task.cpuTime, 'number');
+	t.is(typeof task.windowTitle, 'string');
+};
 
-	t.true(data.length > 0);
-	const d = data[0];
-	t.true(d.imageName.length > 0);
-	t.is(typeof d.pid, 'number');
-	t.is(typeof d.memUsage, 'number');
-});
+const macro = async (t, options) => {
+	const tasks = await tasklist(options);
+	t.true(tasks.length > 0);
+	for (const task of tasks) {
+		hasDefaultTaskProps(t, task);
+		if (options.verbose) {
+			hasVerboseTaskProps(t, task);
+		} else {
+			hasNonVerboseTaskProps(t, task);
+		}
+	}
+};
+
+test('default', macro, {});
+test('verbose option', macro, {verbose: true});
+test('filter option', macro, {filter: ['status eq running', 'username ne F4k3U53RN4M3']});
