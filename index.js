@@ -45,17 +45,33 @@ module.exports = opts => {
 	const headers = opts.verbose ? verboseHeaders : defaultHeaders;
 
 	return pify(childProcess.execFile)('tasklist', args)
-		.then(stdout => neatCsv(stdout, {headers}))
-		.then(data => data.map(task => {
-			// Normalize task props
-			task.pid = Number(task.pid);
-			task.sessionNumber = Number(task.sessionNumber);
-			task.memUsage = Number(task.memUsage.replace(/[^\d]/g, '')) * 1024;
+		// INFO: No tasks are running which match the specified criteria.
+		// See: https://github.com/sindresorhus/tasklist/issues/9
+		.then(stdout => stdout.startsWith('INFO:') ?
+			[] :
+			neatCsv(stdout, {headers})
+		)
+		.then(data =>
+			new Promise((resolve, reject) =>
+				// eslint-disable-next-line array-callback-return
+				resolve(data.map(task => {
+					try {
+						// Normalize task props
+						task.pid = Number(task.pid);
+						task.sessionNumber = Number(task.sessionNumber);
+						task.memUsage = Number(task.memUsage.replace(/[^\d]/g, '')) * 1024;
 
-			if (opts.verbose) {
-				task.cpuTime = sec(task.cpuTime);
-			}
+						if (opts.verbose) {
+							task.cpuTime = sec(task.cpuTime);
+						}
 
-			return task;
-		}));
+						return task;
+					} catch (err) {
+						// Handle parsing errors gracefully
+						reject(err);
+					}
+				})
+			)
+		)
+	);
 };
