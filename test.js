@@ -47,5 +47,5 @@ test('test handle no matching tasks gracefully', async t => {
 	const tasks = await tasklist({
 		filter: ['imagename eq does-not-exist']
 	});
-	t.true(tasks.length === 0);
+	t.is(tasks.length, 0);
 });

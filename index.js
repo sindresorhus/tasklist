@@ -51,27 +51,17 @@ module.exports = opts => {
 			[] :
 			neatCsv(stdout, {headers})
 		)
-		.then(data =>
-			new Promise((resolve, reject) =>
-				// eslint-disable-next-line array-callback-return
-				resolve(data.map(task => {
-					try {
-						// Normalize task props
-						task.pid = Number(task.pid);
-						task.sessionNumber = Number(task.sessionNumber);
-						task.memUsage = Number(task.memUsage.replace(/[^\d]/g, '')) * 1024;
+		.then(data => data.map(task => {
+			// Normalize task props
+			task.pid = Number(task.pid);
+			task.sessionNumber = Number(task.sessionNumber);
+			task.memUsage = Number(task.memUsage.replace(/[^\d]/g, '')) * 1024;
 
-						if (opts.verbose) {
-							task.cpuTime = sec(task.cpuTime);
-						}
+			if (opts.verbose) {
+				task.cpuTime = sec(task.cpuTime);
+			}
 
-						return task;
-					} catch (err) {
-						// Handle parsing errors gracefully
-						reject(err);
-					}
-				})
-			)
-		)
+			return task;
+		})
 	);
 };
