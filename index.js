@@ -45,8 +45,7 @@ module.exports = opts => {
 	const headers = opts.verbose ? verboseHeaders : defaultHeaders;
 
 	return pify(childProcess.execFile)('tasklist', args)
-		// INFO: No tasks are running which match the specified criteria.
-		// See: https://github.com/sindresorhus/tasklist/issues/9
+		// `INFO:` means no matching tasks. See #9.
 		.then(stdout => stdout.startsWith('INFO:') ? [] : neatCsv(stdout, {headers}))
 		.then(data => data.map(task => {
 			// Normalize task props
