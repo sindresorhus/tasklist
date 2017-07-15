@@ -58,6 +58,5 @@ module.exports = opts => {
 			}
 
 			return task;
-		})
-	);
+		}));
 };
