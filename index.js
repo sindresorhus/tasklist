@@ -47,10 +47,7 @@ module.exports = opts => {
 	return pify(childProcess.execFile)('tasklist', args)
 		// INFO: No tasks are running which match the specified criteria.
 		// See: https://github.com/sindresorhus/tasklist/issues/9
-		.then(stdout => stdout.startsWith('INFO:') ?
-			[] :
-			neatCsv(stdout, {headers})
-		)
+		.then(stdout => stdout.startsWith('INFO:') ? [] : neatCsv(stdout, {headers}))
 		.then(data => data.map(task => {
 			// Normalize task props
 			task.pid = Number(task.pid);
