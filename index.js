@@ -55,7 +55,7 @@ module.exports = opts => {
 			if (task.memUsage) {
 				task.memUsage = Number(task.memUsage.replace(/[^\d]/g, '')) * 1024;
 			}
-			
+
 			if (opts.verbose) {
 				task.cpuTime = sec(task.cpuTime);
 			}
