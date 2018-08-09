@@ -8,7 +8,7 @@ Cleans up and normalizes the data.
 ## Install
 
 ```
-$ npm install --save tasklist
+$ npm install tasklist
 ```
 
 
@@ -17,18 +17,18 @@ $ npm install --save tasklist
 ```js
 const tasklist = require('tasklist');
 
-tasklist().then(tasks => {
-	console.log(tasks);
+(async () => {
+	console.log(await tasklist());
 	/*
 	[{
 		imageName: 'taskhostex.exe',
 		pid: 1820,
 		sessionName: 'Console',
 		sessionNumber: 1,
-		memUsage: 4415488,
+		memUsage: 4415488
 	}, …]
 	*/
-});
+})();
 ```
 
 
@@ -75,8 +75,8 @@ With the `verbose` option set to `true`, it additionally returns the following p
 ```js
 const tasklist = require('tasklist');
 
-tasklist({verbose: true}).then(tasks => {
-	console.log(tasks);
+(async () => {
+	console.log(await tasklist({verbose: true}));
 	/*
 	[{
 		imageName: 'taskhostex.exe',
@@ -90,7 +90,7 @@ tasklist({verbose: true}).then(tasks => {
 		windowTitle: 'Task Host Window'
 	}, …]
 	*/
-});
+})();
 ```
 
 **Warning:** Using the `verbose` option may have a considerable performance impact (See: [#6](https://github.com/sindresorhus/tasklist/issues/6)).

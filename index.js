@@ -4,29 +4,27 @@ const pify = require('pify');
 const neatCsv = require('neat-csv');
 const sec = require('sec');
 
-module.exports = opts => {
+module.exports = (options = {}) => {
 	if (process.platform !== 'win32') {
 		return Promise.reject(new Error('Windows only'));
 	}
 
-	opts = opts || {};
-
 	const args = ['/nh', '/fo', 'csv'];
 
-	if (opts.verbose) {
+	if (options.verbose) {
 		args.push('/v');
 	}
 
-	if (opts.system && opts.username && opts.password) {
+	if (options.system && options.username && options.password) {
 		args.push(
-			'/s', opts.system,
-			'/u', opts.username,
-			'/p', opts.password
+			'/s', options.system,
+			'/u', options.username,
+			'/p', options.password
 		);
 	}
 
-	if (Array.isArray(opts.filter)) {
-		for (const filter of opts.filter) {
+	if (Array.isArray(options.filter)) {
+		for (const filter of options.filter) {
 			args.push('/fi', filter);
 		}
 	}
@@ -46,7 +44,7 @@ module.exports = opts => {
 		'windowTitle'
 	]);
 
-	const headers = opts.verbose ? verboseHeaders : defaultHeaders;
+	const headers = options.verbose ? verboseHeaders : defaultHeaders;
 
 	return pify(childProcess.execFile)('tasklist', args)
 		// `INFO:` means no matching tasks. See #9.
@@ -57,7 +55,7 @@ module.exports = opts => {
 			task.sessionNumber = Number(task.sessionNumber);
 			task.memUsage = Number(task.memUsage.replace(/[^\d]/g, '')) * 1024;
 
-			if (opts.verbose) {
+			if (options.verbose) {
 				task.cpuTime = sec(task.cpuTime);
 			}
 

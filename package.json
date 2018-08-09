@@ -1,42 +1,42 @@
 {
-  "name": "tasklist",
-  "version": "3.1.1",
-  "description": "Wrapper for the Windows `tasklist` command. Returns a list of apps and services with their Process ID (PID) for all tasks running on either a local or a remote computer.",
-  "license": "MIT",
-  "repository": "sindresorhus/tasklist",
-  "author": {
-    "name": "Sindre Sorhus",
-    "email": "sindresorhus@gmail.com",
-    "url": "sindresorhus.com"
-  },
-  "engines": {
-    "node": ">=4"
-  },
-  "scripts": {
-    "test": "xo && ava"
-  },
-  "files": [
-    "index.js"
-  ],
-  "keywords": [
-    "tasklist",
-    "task",
-    "list",
-    "windows",
-    "win",
-    "win32",
-    "pid",
-    "process",
-    "processes",
-    "services"
-  ],
-  "dependencies": {
-    "neat-csv": "^2.1.0",
-    "pify": "^2.2.0",
-    "sec": "^1.0.0"
-  },
-  "devDependencies": {
-    "ava": "*",
-    "xo": "*"
-  }
+	"name": "tasklist",
+	"version": "3.1.1",
+	"description": "Wrapper for the Windows `tasklist` command. Returns a list of apps and services with their Process ID (PID) for all tasks running on either a local or a remote computer.",
+	"license": "MIT",
+	"repository": "sindresorhus/tasklist",
+	"author": {
+		"name": "Sindre Sorhus",
+		"email": "sindresorhus@gmail.com",
+		"url": "sindresorhus.com"
+	},
+	"engines": {
+		"node": ">=6"
+	},
+	"scripts": {
+		"test": "xo && ava"
+	},
+	"files": [
+		"index.js"
+	],
+	"keywords": [
+		"tasklist",
+		"task",
+		"list",
+		"windows",
+		"win",
+		"win32",
+		"pid",
+		"process",
+		"processes",
+		"services"
+	],
+	"dependencies": {
+		"neat-csv": "^2.1.0",
+		"pify": "^4.0.0",
+		"sec": "^1.0.0"
+	},
+	"devDependencies": {
+		"ava": "*",
+		"xo": "*"
+	}
 }
