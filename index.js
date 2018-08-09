@@ -11,7 +11,11 @@ module.exports = opts => {
 
 	opts = opts || {};
 
-	const args = ['/v', '/nh', '/fo', 'csv'];
+	const args = ['/nh', '/fo', 'csv'];
+
+	if (opts.verbose) {
+		args.push('/v');
+	}
 
 	if (opts.system && opts.username && opts.password) {
 		args.push(
