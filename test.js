@@ -26,6 +26,9 @@ const hasVerboseTaskProps = (t, task) => {
 const macro = async (t, options) => {
 	const tasks = await tasklist(options);
 
+	console.log(t);
+	console.log(tasks);
+
 	t.true(tasks.length > 0);
 
 	for (const task of tasks) {
