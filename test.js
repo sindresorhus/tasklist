@@ -41,7 +41,7 @@ const macro = async (t, options) => {
 
 test('default', macro, {});
 test('verbose option', macro, {verbose: true});
-test('filter option', macro, {filter: ['status eq running', 'username ne F4k3U53RN4M3']});
+test('filter option', macro, {filter: ['sessionname eq console', 'username ne F4k3U53RN4M3']});
 
 test('test handle no matching tasks gracefully', async t => {
 	const tasks = await tasklist({
