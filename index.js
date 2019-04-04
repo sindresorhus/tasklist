@@ -47,8 +47,8 @@ module.exports = (options = {}) => {
 	const headers = options.verbose ? verboseHeaders : defaultHeaders;
 
 	return pify(childProcess.execFile)('tasklist', args)
-		// `INFO:` means no matching tasks. See #9.
-		.then(stdout => stdout.startsWith('INFO:') ? [] : neatCsv(stdout, {headers}))
+        // not start with `"` means no matching tasks. See #11.
+		.then(stdout => stdout.startsWith('"') ? neatCsv(stdout, {headers}) : [])
 		.then(data => data.map(task => {
 			// Normalize task props
 			task.pid = Number(task.pid);
