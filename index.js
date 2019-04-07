@@ -25,7 +25,7 @@ module.exports = (options = {}) => {
 
 	if (Array.isArray(options.filter)) {
 		for (const filter of options.filter) {
-			args.push('/fi', filter);
+			args.push('/fi', JSON.stringify(filter));
 		}
 	}
 
@@ -45,8 +45,10 @@ module.exports = (options = {}) => {
 	]);
 
 	const headers = options.verbose ? verboseHeaders : defaultHeaders;
+	const command = '@chcp 65001 >nul & tasklist ' + args.join(' ');
+	console.log('ARGS', args);
 
-	return pify(childProcess.execFile)('tasklist', args)
+	return pify(childProcess.exec)(command)
 		// `INFO:` means no matching tasks. See #9.
 		.then(stdout => stdout.startsWith('INFO:') ? [] : neatCsv(stdout, {headers}))
 		.then(data => data.map(task => {
