@@ -36,13 +36,13 @@ const tasklist = require('tasklist');
 
 See the [`tasklist` docs](https://technet.microsoft.com/en-us/library/bb491010.aspx) for more.
 
-### tasklist([options])
+### tasklist(options?)
 
 Returns a `Promise<Array>` with running tasks.
 
 #### options
 
-Type: `Object`
+Type: `object`
 
 The `system`, `username`, `password` options must be specified together.
 
@@ -130,8 +130,3 @@ Specify the types of processes to include or exclude. [More info.](https://techn
 
 - [Sindre Sorhus](https://sindresorhus.com)
 - [Mark Tiedemann](https://marksweb.site)
-
-
-## License
-
-MIT

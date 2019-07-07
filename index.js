@@ -1,12 +1,14 @@
 'use strict';
+const {promisify} = require('util');
 const childProcess = require('child_process');
-const pify = require('pify');
 const neatCsv = require('neat-csv');
 const sec = require('sec');
 
-module.exports = (options = {}) => {
+const execFile = promisify(childProcess.execFile);
+
+module.exports = async (options = {}) => {
 	if (process.platform !== 'win32') {
-		return Promise.reject(new Error('Windows only'));
+		throw new Error('Windows only');
 	}
 
 	const args = ['/nh', '/fo', 'csv'];
@@ -46,19 +48,21 @@ module.exports = (options = {}) => {
 
 	const headers = options.verbose ? verboseHeaders : defaultHeaders;
 
-	return pify(childProcess.execFile)('tasklist', args)
-		// Not start with `"` means no matching tasks. See #11.
-		.then(stdout => stdout.startsWith('"') ? neatCsv(stdout, {headers}) : [])
-		.then(data => data.map(task => {
-			// Normalize task props
-			task.pid = Number(task.pid);
-			task.sessionNumber = Number(task.sessionNumber);
-			task.memUsage = Number(task.memUsage.replace(/[^\d]/g, '')) * 1024;
+	const {stdout} = await execFile('tasklist', args);
 
-			if (options.verbose) {
-				task.cpuTime = sec(task.cpuTime);
-			}
+	// Not start with `"` means no matching tasks. See #11.
+	const data = stdout.startsWith('"') ? await neatCsv(stdout, {headers}) : [];
 
-			return task;
-		}));
+	return data.map(task => {
+		// Normalize task props
+		task.pid = Number(task.pid);
+		task.sessionNumber = Number(task.sessionNumber);
+		task.memUsage = Number(task.memUsage.replace(/[^\d]/g, '')) * 1024;
+
+		if (options.verbose) {
+			task.cpuTime = sec(task.cpuTime);
+		}
+
+		return task;
+	});
 };
