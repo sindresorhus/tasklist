@@ -159,6 +159,7 @@ function stream(options = {}) {
 		parser.end();
 	});
 	parser.on('end', () => pt.end());
+	parser.on('error', error => error);
 
 	return pt;
 }
