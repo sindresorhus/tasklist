@@ -1,7 +1,6 @@
 'use strict';
 const childProcess = require('child_process');
 const {promisify} = require('util');
-const {Stream} = require('stream');
 const csv = require('csv');
 const csvHeaders = require('./csv-headers');
 const {passThrough, transforms} = require('./transform');
@@ -13,62 +12,22 @@ csv.parse[promisify.custom] = (input, options) => new Promise(resolve => {
 });
 const parse = promisify(csv.parse);
 
-class Options {
-	constructor() {
-		/**
-		 * Make tasklist output more info
-		 * @type {Boolean}
-		 */
-		this.verbose = false;
-		/**
-		 * List all service information for each process
-		 * @type {Boolean}
-		 */
-		this.services = false;
-		/**
-		 * Show DLL modules loaded by all tasks
-		 * @type {String}
-		 */
-		this.modules = '';
-		/**
-		 * The IP address or hostname of the remote machine
-		 * @type {String}
-		 */
-		this.system = '';
-		/**
-		 * The username of the remote machine
-		 * @type {String}
-		 */
-		this.username = '';
-		/**
-		 * The password of the remote machine
-		 * @type {String}
-		 */
-		this.password = '';
-		/**
-		 * Display store apps
-		 * @type {Boolean}
-		 */
-		this.apps = false;
-		/**
-		 * Filters to pass to the command
-		 * @see https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/tasklist
-		 * @type {Array}
-		 */
-		this.filter = [];
-	}
+/**
+ * @typedef Options
+ * @property {Boolean} verbose Make tasklist output more info
+ * @property {Boolean} apps Display store apps
+ * @property {Boolean} services List all service information for each process
+ * @property {String} modules Show tasks that loaded the specified DLL module
+ * @property {String} system The IP address or hostname of the remote machine
+ * @property {String} username The username of the remote machine
+ * @property {String} password The password of the remote machine
+ * @property {Array} filter Filters to pass to the command
+ */
 
-	/**
-	 * Function to fake usage of the object
-	 * @returns {Number} literally 2
-	 */
-	_fakeUsage() {
-		return 2;
-	}
-}
-// Fake usage of the object, to pass the no-unused-vars test
-const o = new Options();
-o._fakeUsage();
+/**
+ * @typedef Stream
+ * @type {import 'stream'.Stream}
+ */
 
 /**
  * Exectue tasklist
@@ -207,7 +166,7 @@ function stream(options = {}) {
 /**
  * Execute tasklist and get normalized results from the output
  * @param {Options} options The options of the command
- * @returns {Promise<Object>} The parsed results
+ * @returns {Promise<Array>} The parsed results
  */
 async function promiseInterface(options = {}) {
 	const {args, columns, currentTransform} = main(options);
