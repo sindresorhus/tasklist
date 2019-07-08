@@ -14,16 +14,19 @@ $ npm install tasklist
 ## Usage
 ```js
 const tasklist = require('tasklist');
-tasklist().on('data', (process) => console.log(process))
-/*
-{
-    imageName: 'taskhostex.exe',
-    pid: 1820,
-    sessionName: 'Console',
-    sessionNumber: 1,
-    memUsage: 4415488
-}…
-*/
+
+(async () => {
+	console.log(await tasklist());
+	/*
+	[{
+		imageName: 'taskhostex.exe',
+		pid: 1820,
+		sessionName: 'Console',
+		sessionNumber: 1,
+		memUsage: 4415488
+	}, …]
+	*/
+})();
 ```
 
 
@@ -33,7 +36,32 @@ See the [`tasklist` docs](https://technet.microsoft.com/en-us/library/bb491010.a
 
 ### tasklist(options?)
 
-Returns a `Stream` that sends the running processes one-by-one.
+Returns a `Promise<Array>` that contains the normalized results of the command output.  
+Examples for `options` below will use this interface, but you can check `tasklist.stream` below for usage of the stream interface.  
+
+### tasklist.stream(options?)
+
+Returns a `Stream` that returns the resulting lines, normalized, one-by-one.  
+Options are the same for the Stream interface as the Promise interface.  
+**Example using stream interface**
+
+```js
+const tasklist = require('tasklist');
+tasklist.stream({verbose: true}).on('data', (process) => console.log(process))
+/*
+{
+    imageName: 'taskhostex.exe',
+    pid: 1820,
+    sessionName: 'Console',
+    sessionNumber: 1,
+    memUsage: 4415488,
+    status: 'Running',
+    username: 'SINDRESORHU3930\\sindre'
+    cpuTime: 0,
+    windowTitle: 'Task Host Window'
+}…
+*/
+```
 
 #### options
 
@@ -52,7 +80,7 @@ Default: `false`
 
 Return verbose results.
 
-Without the `verbose` and `apps` option, `taskkill` returns tasks with the following properties:
+Without the `verbose` and `apps` option, `tasklist` returns tasks with the following properties:
 
 - `imageName` (Type: `string`)
 - `pid` (Type: `number`)
@@ -73,20 +101,23 @@ With the `verbose` option set to `true` but the `apps` option still set to `fals
 
 ```js
 const tasklist = require('tasklist');
-tasklist({verbose: true}).on('data', (process) => console.log(process))
-/*
-{
-    imageName: 'taskhostex.exe',
-    pid: 1820,
-    sessionName: 'Console',
-    sessionNumber: 1,
-    memUsage: 4415488,
-    status: 'Running',
-    username: 'SINDRESORHU3930\\sindre'
-    cpuTime: 0,
-    windowTitle: 'Task Host Window'
-}…
-*/
+
+(async () => {
+	console.log(await tasklist({verbose: true}));
+	/*
+	[{
+		imageName: 'taskhostex.exe',
+        pid: 1820,
+        sessionName: 'Console',
+        sessionNumber: 1,
+        memUsage: 4415488,
+        status: 'Running',
+        username: 'SINDRESORHU3930\\sindre'
+        cpuTime: 0,
+        windowTitle: 'Task Host Window'
+	}, …]
+	*/
+})();
 ```
 
 **Warning:** Using the `verbose` option may have a considerable performance impact (See: [#6](https://github.com/sindresorhus/tasklist/issues/6)).
@@ -131,15 +162,18 @@ Without the `verbose` option, the command returns the following data:
 
 ```js
 const tasklist = require('tasklist');
-tasklist({apps: true}).on('data', (app) => console.log(app))
-/*
-{
-    imageName: 'SearchUI.exe (CortanaUI)',
-    pid: 1820,
-    memUsage: 4415488,
-    packageName: 'Microsoft.Windows.Cortana'
-}…
-*/
+
+(async () => {
+	console.log(await tasklist({apps: true}));
+	/*
+	[{
+		imageName: 'SearchUI.exe (CortanaUI)',
+        pid: 1820,
+        memUsage: 4415488,
+        packageName: 'Microsoft.Windows.Cortana'
+	}, …]
+	*/
+})();
 ```
 
 With the `verbose` option set to `true`, the command additionally returns the following data:
@@ -156,21 +190,24 @@ With the `verbose` option set to `true`, the command additionally returns the fo
 
 ```js
 const tasklist = require('tasklist');
-tasklist({verbose: true, apps: true}).on('data', (process) => console.log(process))
-/*
-{
-    imageName: 'SearchUI.exe (CortanaUI)',
-    pid: 1820,
-    sessionName: 'Console',
-    sessionNumber: 1,
-    memUsage: 4415488,
-    status: 'Running',
-    username: 'SINDRESORHU3930\\sindre'
-    cpuTime: 0,
-    windowTitle: 'N/A',
-    packageName: 'Microsoft.Windows.Cortana'
-}…
-*/
+
+(async () => {
+	console.log(await tasklist({apps: true, verbose: true}));
+	/*
+	[{
+		imageName: 'SearchUI.exe (CortanaUI)',
+        pid: 1820,
+        sessionName: 'Console',
+        sessionNumber: 1,
+        memUsage: 4415488,
+        status: 'Running',
+        username: 'SINDRESORHU3930\\sindre'
+        cpuTime: 0,
+        windowTitle: 'N/A',
+        packageName: 'Microsoft.Windows.Cortana'
+	}, …]
+	*/
+})();
 ```
 
 ##### modules
@@ -184,14 +221,17 @@ List all tasks using the given DLL module name. If an empty string is given, it 
 
 ```js
 const tasklist = require('tasklist');
-tasklist({modules: 'wmiutils.dll'}).on('data', (task) => console.log(task))
-/*
-{
-    imageName: 'chrome.exe',
-    pid: 1820,
-    modules: ['wmiutils.dll']
-}…
-*/
+
+(async () => {
+	console.log(await tasklist({modules: 'wmiutils.dll'}));
+	/*
+	[{
+		imageName: 'chrome.exe',
+        pid: 1820,
+        modules: ['wmiutils.dll']
+	}, …]
+	*/
+})();
 ```
 
 ##### services
@@ -205,14 +245,17 @@ Displays services hosted in each process.
 
 ```js
 const tasklist = require('tasklist');
-tasklist({services: true}).on('data', (service) => console.log(service))
-/*
-{
-    imageName: 'lsass.exe',
-    pid: 856,
-    services: ['KeyIso', 'SamSs', 'VaultSvc']
-}…
-*/
+
+(async () => {
+	console.log(await tasklist({services: true}));
+	/*
+	[{
+		imageName: 'lsass.exe',
+        pid: 856,
+        services: ['KeyIso', 'SamSs', 'VaultSvc']
+	}, …]
+	*/
+})();
 ```
 
 ## Related

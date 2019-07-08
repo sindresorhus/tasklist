@@ -1,8 +1,17 @@
 'use strict';
 const childProcess = require('child_process');
+const {promisify} = require('util');
+const {Stream} = require('stream');
 const csv = require('csv');
 const csvHeaders = require('./csv-headers');
 const {passThrough, transforms} = require('./transform');
+
+const execFile = promisify(childProcess.execFile);
+
+csv.parse[promisify.custom] = (input, options) => new Promise(resolve => {
+	csv.parse(input, options, (_, records) => resolve(records));
+});
+const parse = promisify(csv.parse);
 
 class Options {
 	constructor() {
@@ -53,18 +62,18 @@ class Options {
 	 * Function to fake usage of the object
 	 * @returns {Number} literally 2
 	 */
-	fakeUsage() {
+	_fakeUsage() {
 		return 2;
 	}
 }
 // Fake usage of the object, to pass the no-unused-vars test
 const o = new Options();
-o.fakeUsage();
+o._fakeUsage();
 
 /**
  * Exectue tasklist
  * @param {Options} options The options of the command
- * @returns {Stream} Stream, returning parsed results
+ * @returns {Object} Object, returning args, csv column names and the current transform function
  */
 function main(options = {}) {
 	const isRemote = options.system && options.username && options.password;
@@ -144,6 +153,16 @@ function main(options = {}) {
 
 	const columns = csvHeaders[currentHeader];
 	const currentTransform = transforms[currentHeader];
+	return {args, columns, currentTransform};
+}
+
+/**
+ * Execute tasklist and return results through a stream
+ * @param {Options} options The options of the command
+ * @returns {Stream} Stream, returning parsed results
+ */
+function stream(options = {}) {
+	const {args, columns, currentTransform} = main(options);
 	const parser = csv.parse({columns});
 	const pt = passThrough();
 	const processOutput = childProcess.spawn('tasklist.exe', args).stdout;
@@ -160,14 +179,19 @@ function main(options = {}) {
 			}
 		}
 
-		parser.write(data);
+		if (parser.writable) {
+			parser.write(data);
+		}
 	});
 	parser.on('readable', () => {
 		let data;
 		do {
 			data = parser.read();
-			if (data) {
+			if (data && pt.writable) {
 				pt.write(currentTransform(data));
+			} else {
+				processOutput.end();
+				break;
 			}
 		} while (data);
 	});
@@ -180,4 +204,22 @@ function main(options = {}) {
 	return pt;
 }
 
-module.exports = main;
+/**
+ * Execute tasklist and get normalized results from the output
+ * @param {Options} options The options of the command
+ * @returns {Promise<Object>} The parsed results
+ */
+async function promiseInterface(options = {}) {
+	const {args, columns, currentTransform} = main(options);
+	const {stdout} = await execFile('tasklist', args);
+	if (!stdout.startsWith('"')) {
+		return [];
+	}
+
+	const records = await parse(stdout, {columns});
+	records.map(task => currentTransform(task));
+	return records;
+}
+
+module.exports = promiseInterface;
+module.exports.stream = stream;
