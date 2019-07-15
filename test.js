@@ -80,7 +80,6 @@ const _callAndClose = opts => {
 			const apiStream = tasklist.stream(opts);
 			apiStream.on('data', () => apiStream.end());
 			apiStream.on('end', () => resolve());
-			apiStream.on('error', error => reject(error));
 		} catch (error) {
 			reject(error);
 		}

@@ -1,9 +1,10 @@
 'use strict';
 const childProcess = require('child_process');
 const {promisify} = require('util');
+const {pipeline} = require('stream');
 const csv = require('csv');
 const csvHeaders = require('./csv-headers');
-const {passThrough, transforms} = require('./transform');
+const transform = require('./transform');
 
 const execFile = promisify(childProcess.execFile);
 
@@ -111,7 +112,7 @@ function main(options = {}) {
 	}
 
 	const columns = csvHeaders[currentHeader];
-	const currentTransform = transforms[currentHeader];
+	const currentTransform = transform.transforms[currentHeader];
 	return {args, columns, currentTransform};
 }
 
@@ -120,48 +121,15 @@ function main(options = {}) {
  * @param {Options} options The options of the command
  * @returns {Stream} Stream, returning parsed results
  */
-function stream(options = {}) {
+function streamInterface(options = {}) {
 	const {args, columns, currentTransform} = main(options);
-	const parser = csv.parse({columns});
-	const pt = passThrough();
+	const checkEmptyStream = new transform.ReportEmpty().getTransform();
 	const processOutput = childProcess.spawn('tasklist.exe', args).stdout;
-	let outputChecked = false;
 
-	processOutput.on('data', data => {
-		if (!outputChecked) {
-			outputChecked = true;
-			// Check if result is empty
-			if (!data.toString().startsWith('"')) {
-				processOutput.end();
-				pt.end();
-				return;
-			}
-		}
-
-		if (parser.writable) {
-			parser.write(data);
-		}
-	});
-	parser.on('readable', () => {
-		let data;
-		do {
-			data = parser.read();
-			if (data && pt.writable) {
-				pt.write(currentTransform(data));
-			} else {
-				processOutput.end();
-				break;
-			}
-		} while (data);
-	});
-
-	processOutput.on('end', () => {
-		parser.end();
-	});
-	parser.on('end', () => pt.end());
-	parser.on('error', _ => pt.end());
-
-	return pt;
+	// Ignore errors originating from stream end
+	const resultStream = pipeline(processOutput, checkEmptyStream, csv.parse({columns}), transform.makeTransform(currentTransform), error => error);
+	resultStream.on('error', error => error);
+	return resultStream;
 }
 
 /**
@@ -171,7 +139,7 @@ function stream(options = {}) {
  */
 async function promiseInterface(options = {}) {
 	const {args, columns, currentTransform} = main(options);
-	const {stdout} = await execFile('tasklist', args);
+	const {stdout} = await execFile('tasklist.exe', args);
 	if (!stdout.startsWith('"')) {
 		return [];
 	}
@@ -182,4 +150,4 @@ async function promiseInterface(options = {}) {
 }
 
 module.exports = promiseInterface;
-module.exports.stream = stream;
+module.exports.stream = streamInterface;
