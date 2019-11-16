@@ -17,7 +17,7 @@ function main(options = {}) {
 	const isRemote = options.system && options.username && options.password;
 
 	if (process.platform !== 'win32') {
-		// throw new Error('Windows only');
+		throw new Error('Windows only');
 	}
 
 	if (options.verbose === true && (options.services === true || options.modules !== undefined)) {
