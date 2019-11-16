@@ -1,7 +1,7 @@
 'use strict';
 const childProcess = require('child_process');
 const {promisify} = require('util');
-const pipe = require('multipipe');
+const {pipeline} = require('stream');
 const csv = require('csv');
 const csvHeaders = require('./csv-headers');
 const transform = require('./transform');
@@ -13,28 +13,6 @@ csv.parse[promisify.custom] = (input, options) => new Promise(resolve => {
 });
 const parse = promisify(csv.parse);
 
-/**
- * @typedef Options
- * @property {Boolean} verbose Make tasklist output more info
- * @property {Boolean} apps Display store apps
- * @property {Boolean} services List all service information for each process
- * @property {String} modules Show tasks that loaded the specified DLL module
- * @property {String} system The IP address or hostname of the remote machine
- * @property {String} username The username of the remote machine
- * @property {String} password The password of the remote machine
- * @property {Array} filter Filters to pass to the command
- */
-
-/**
- * @typedef Stream
- * @type {import 'stream'.Stream}
- */
-
-/**
- * Exectue tasklist
- * @param {Options} options The options of the command
- * @returns {Object} Object, returning args, csv column names and the current transform function
- */
 function main(options = {}) {
 	const isRemote = options.system && options.username && options.password;
 
@@ -116,27 +94,17 @@ function main(options = {}) {
 	return {args, columns, currentTransform};
 }
 
-/**
- * Execute tasklist and return results through a stream
- * @param {Options} options The options of the command
- * @returns {Stream} Stream, returning parsed results
- */
 function streamInterface(options = {}) {
 	const {args, columns, currentTransform} = main(options);
 	const checkEmptyStream = new transform.ReportEmpty().getTransform();
 	const processOutput = childProcess.spawn('tasklist.exe', args).stdout;
 
 	// Ignore errors originating from stream end
-	const resultStream = pipe(processOutput, checkEmptyStream, csv.parse({columns}), transform.makeTransform(currentTransform));
+	const resultStream = pipeline(processOutput, checkEmptyStream, csv.parse({columns}), transform.makeTransform(currentTransform));
 	resultStream.on('error', error => error);
 	return resultStream;
 }
 
-/**
- * Execute tasklist and get normalized results from the output
- * @param {Options} options The options of the command
- * @returns {Promise<Array>} The parsed results
- */
 async function promiseInterface(options = {}) {
 	const {args, columns, currentTransform} = main(options);
 	const {stdout} = await execFile('tasklist.exe', args);
