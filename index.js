@@ -17,7 +17,7 @@ function main(options = {}) {
 	const isRemote = options.system && options.username && options.password;
 
 	if (process.platform !== 'win32') {
-		throw new Error('Windows only');
+		// throw new Error('Windows only');
 	}
 
 	if (options.verbose === true && (options.services === true || options.modules !== undefined)) {
@@ -100,7 +100,7 @@ function streamInterface(options = {}) {
 	const processOutput = childProcess.spawn('tasklist.exe', args).stdout;
 
 	// Ignore errors originating from stream end
-	const resultStream = pipeline(processOutput, checkEmptyStream, csv.parse({columns}), transform.makeTransform(currentTransform));
+	const resultStream = pipeline(processOutput, checkEmptyStream, csv.parse({columns}), transform.makeTransform(currentTransform), err => err);
 	resultStream.on('error', error => error);
 	return resultStream;
 }
