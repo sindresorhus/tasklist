@@ -1,5 +1,6 @@
 /// <reference types="node"/>
 import {Readable as ReadableStream} from 'stream';
+
 declare namespace tasklist {
 	type Options = {
 		/**
@@ -28,6 +29,7 @@ declare namespace tasklist {
 		```
 		*/
 		readonly verbose?: Boolean
+
 		/**
 		Return store apps
 
@@ -49,6 +51,7 @@ declare namespace tasklist {
 		```
 		*/
 		readonly apps?: Boolean
+
 		/**
 		List all service information for each process
 
@@ -70,6 +73,7 @@ declare namespace tasklist {
 		```
 		*/
 		readonly services?: Boolean
+
 		/**
 		Show tasks that loaded the specified DLL modules
 
@@ -91,24 +95,28 @@ declare namespace tasklist {
 		```
 		*/
 		readonly modules?: String
+
 		/**
 		The IP address or hostname of the remote machine
 
 		@default undefined
 		*/
 		readonly system?: String
+
 		/**
 		The username of the remote machine
 
 		@default undefined
 		*/
 		readonly username?: String
+
 		/**
 		The password of the remote machine
 
 		@default undefined
 		*/
 		readonly password?: String
+
 		/**
 		Filters to pass to the command
 
