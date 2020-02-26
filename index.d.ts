@@ -252,7 +252,7 @@ declare const tasklist: {
 	@example
 	```
 	const tasklist = require('tasklist');
-	tasklist.stream({verbose: true}).on('data', (process) => console.log(process))
+	tasklist.stream({verbose: true}).pipe(process.stdout);
 	//=> {
 		imageName: 'taskhostex.exe',
 		pid: 1820,

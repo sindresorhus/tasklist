@@ -47,7 +47,7 @@ Options are the same for the Stream interface as the Promise interface.
 
 ```js
 const tasklist = require('tasklist');
-tasklist.stream({verbose: true}).on('data', (process) => console.log(process))
+tasklist.stream({verbose: true}).pipe(process.stdout);
 /*
 {
     imageName: 'taskhostex.exe',
