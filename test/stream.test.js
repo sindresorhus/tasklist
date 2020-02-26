@@ -150,7 +150,5 @@ test('test handle no matching tasks gracefully', async t => {
 });
 
 test('test handle stream close gracefully', async t => {
-	await t.notThrowsAsync(() => {
-		return _callAndClose();
-	});
+	await t.notThrowsAsync(_callAndClose());
 });
