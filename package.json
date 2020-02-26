@@ -13,7 +13,7 @@
 		"node": ">=8"
 	},
 	"scripts": {
-		"test": "xo && ava && tsd-check"
+		"test": "xo && ava"
 	},
 	"files": [
 		"index.js",
@@ -41,7 +41,6 @@
 		"@types/node": "^12.12.8",
 		"ava": "^2.1.0",
 		"get-stream": "^5.1.0",
-		"tsd-check": "^0.6.0",
 		"xo": "^0.24.0"
 	},
 	"ava": {
