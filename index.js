@@ -7,15 +7,9 @@ const csvHeaders = require('./csv-headers');
 const transform = require('./transform');
 
 const execFile = promisify(childProcess.execFile);
-
-csv.parse[promisify.custom] = (input, options) => new Promise(resolve => {
-	csv.parse(input, options, (_, records) => resolve(records));
-});
 const parse = promisify(csv.parse);
 
 function main(options = {}) {
-	const isRemote = options.system && options.username && options.password;
-
 	if (process.platform !== 'win32') {
 		throw new Error('Windows only');
 	}
@@ -26,6 +20,19 @@ function main(options = {}) {
 
 	if (options.modules !== undefined && options.services === true) {
 		throw new Error('The Services and Modules options can\'t be used together');
+	}
+
+	// Check if system, username and password is specified together
+	const remoteParams = [options.system, options.username, options.password];
+	let isRemote;
+	if (remoteParams.every(value => value === undefined)) {
+		// All params are undefined
+		isRemote = false;
+	} else if (remoteParams.some(value => value === undefined)) {
+		// Some, but not all of the params are undefined
+		throw new Error('The System, Username and Password options must be specified together');
+	} else {
+		isRemote = true;
 	}
 
 	// Check for unsupported filters on remote machines

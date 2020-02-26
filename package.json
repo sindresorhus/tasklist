@@ -18,7 +18,8 @@
 	"files": [
 		"index.js",
 		"csv-headers.js",
-		"index.d.ts"
+		"index.d.ts",
+		"transform.js"
 	],
 	"keywords": [
 		"tasklist",
@@ -45,7 +46,7 @@
 	},
 	"ava": {
 		"files": [
-			"*.test.js"
+			"test/*.test.js"
 		]
 	},
 	"xo": {

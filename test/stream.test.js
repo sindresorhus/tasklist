@@ -1,6 +1,6 @@
 import test from 'ava';
 import getStream from 'get-stream';
-import tasklist from '.';
+import tasklist from '..';
 
 const hasDefaultTaskProps = (t, task) => {
 	t.is(typeof task.imageName, 'string');

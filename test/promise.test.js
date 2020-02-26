@@ -1,5 +1,5 @@
 import test from 'ava';
-import tasklist from '.';
+import tasklist from '..';
 
 const hasDefaultTaskProps = (t, task) => {
 	t.is(typeof task.imageName, 'string');
