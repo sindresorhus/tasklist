@@ -2,9 +2,9 @@
 const childProcess = require('child_process');
 const {promisify} = require('util');
 const {pipeline} = require('stream');
-const csv = require('csv');
 const csvHeaders = require('./csv-headers');
 const transform = require('./transform');
+const csv = require('csv');
 
 const execFile = promisify(childProcess.execFile);
 const parse = promisify(csv.parse);
