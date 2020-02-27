@@ -16,7 +16,10 @@
 		"test": "xo && ava"
 	},
 	"files": [
-		"index.js"
+		"index.js",
+		"csv-headers.js",
+		"index.d.ts",
+		"transform.js"
 	],
 	"keywords": [
 		"tasklist",
@@ -31,11 +34,23 @@
 		"services"
 	],
 	"dependencies": {
-		"neat-csv": "^5.0.0",
+		"csv": "^5.1.1",
 		"sec": "^1.0.0"
 	},
 	"devDependencies": {
+		"@types/node": "^12.12.8",
 		"ava": "^2.1.0",
+		"get-stream": "^5.1.0",
 		"xo": "^0.24.0"
+	},
+	"ava": {
+		"files": [
+			"test/*.test.js"
+		]
+	},
+	"xo": {
+		"ignores": [
+			"*.ts"
+		]
 	}
 }
