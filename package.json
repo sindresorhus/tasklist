@@ -4,13 +4,14 @@
 	"description": "Wrapper for the Windows `tasklist` command. Returns a list of apps and services with their Process ID (PID) for all tasks running on either a local or a remote computer.",
 	"license": "MIT",
 	"repository": "sindresorhus/tasklist",
+	"funding": "https://github.com/sponsors/sindresorhus",
 	"author": {
 		"name": "Sindre Sorhus",
 		"email": "sindresorhus@gmail.com",
-		"url": "sindresorhus.com"
+		"url": "https://sindresorhus.com"
 	},
 	"engines": {
-		"node": ">=8"
+		"node": ">=10"
 	},
 	"scripts": {
 		"test": "xo && ava"
@@ -38,10 +39,10 @@
 		"sec": "^1.0.0"
 	},
 	"devDependencies": {
-		"@types/node": "^12.12.8",
+		"@types/node": "^13.7.6",
 		"ava": "^2.1.0",
 		"get-stream": "^5.1.0",
-		"xo": "^0.24.0"
+		"xo": "^0.27.2"
 	},
 	"ava": {
 		"files": [

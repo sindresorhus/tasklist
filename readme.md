@@ -4,7 +4,6 @@
 
 Cleans up and normalizes the data.
 
-
 ## Install
 
 ```
@@ -18,17 +17,19 @@ const tasklist = require('tasklist');
 (async () => {
 	console.log(await tasklist());
 	/*
-	[{
-		imageName: 'taskhostex.exe',
-		pid: 1820,
-		sessionName: 'Console',
-		sessionNumber: 1,
-		memUsage: 4415488
-	}, …]
+	[
+		{
+			imageName: 'taskhostex.exe',
+			pid: 1820,
+			sessionName: 'Console',
+			sessionNumber: 1,
+			memUsage: 4415488
+		},
+		…
+	]
 	*/
 })();
 ```
-
 
 ## API
 
@@ -36,17 +37,21 @@ See the [`tasklist` docs](https://technet.microsoft.com/en-us/library/bb491010.a
 
 ### tasklist(options?)
 
-Returns a `Promise<Array>` that contains the normalized results of the command output.  
-Examples for `options` below will use this interface, but you can check `tasklist.stream` below for usage of the stream interface.  
+Returns a `Promise<object[]>` that contains the normalized results of the command output.
+
+Examples for `options` below will use this interface, but you can check `tasklist.stream` below for usage of the stream interface.
 
 ### tasklist.stream(options?)
 
-Returns a `Stream` that returns the resulting lines, normalized, one-by-one.  
-Options are the same for the Stream interface as the Promise interface.  
+Returns a `stream.Readable` that returns the resulting lines, normalized, one-by-one.
+
+Options are the same as the Promise interface.
+
 **Example using stream interface**
 
 ```js
 const tasklist = require('tasklist');
+
 tasklist.stream({verbose: true}).pipe(process.stdout);
 /*
 {
@@ -59,7 +64,8 @@ tasklist.stream({verbose: true}).pipe(process.stdout);
     username: 'SINDRESORHU3930\\sindre'
     cpuTime: 0,
     windowTitle: 'Task Host Window'
-}…
+}
+…
 */
 ```
 
@@ -68,14 +74,14 @@ tasklist.stream({verbose: true}).pipe(process.stdout);
 Type: `object`
 
 **Warning**
-The `system`, `username`, `password` options must be specified together.  
-The `modules` and `services` options can't be specified if verbose is set to `true`.  
-The `modules` and `services` options can't be specified at the same time.  
-When `system`, `username`, `password` options are specified, the filter option can't have `windowtitle` and `status` as the parameter.  
+The `system`, `username`, `password` options must be specified together.
+The `modules` and `services` options can't be specified if verbose is set to `true`.
+The `modules` and `services` options can't be specified at the same time.
+When `system`, `username`, `password` options are specified, the filter option can't have `windowtitle` and `status` as the parameter.
 
 ##### verbose
 
-Type: `boolean`<br>
+Type: `boolean`\
 Default: `false`
 
 Return verbose results.
@@ -105,17 +111,20 @@ const tasklist = require('tasklist');
 (async () => {
 	console.log(await tasklist({verbose: true}));
 	/*
-	[{
-		imageName: 'taskhostex.exe',
-        pid: 1820,
-        sessionName: 'Console',
-        sessionNumber: 1,
-        memUsage: 4415488,
-        status: 'Running',
-        username: 'SINDRESORHU3930\\sindre'
-        cpuTime: 0,
-        windowTitle: 'Task Host Window'
-	}, …]
+	[
+		{
+			imageName: 'taskhostex.exe',
+	        pid: 1820,
+	        sessionName: 'Console',
+	        sessionNumber: 1,
+	        memUsage: 4415488,
+	        status: 'Running',
+	        username: 'SINDRESORHU3930\\sindre'
+	        cpuTime: 0,
+	        windowTitle: 'Task Host Window'
+		},
+		…
+	]
 	*/
 })();
 ```
@@ -130,8 +139,8 @@ Name or IP address of a remote computer (don't use backslashes). The default is 
 
 ##### username
 
-Type: `string`<br>
-Example: `SINDRESORHU3930\\sindre`
+Type: `string`\
+Example: `'SINDRESORHU3930\\sindre'`
 
 User specified by `User` or `Domain\User`. The default is the permissions of the current logged on user on the computer issuing the command.
 
@@ -143,7 +152,7 @@ Password of the user account for the specified `username`.
 
 ##### filter
 
-Type: `array`
+Type: `string[]`
 
 Specify the types of processes to include or exclude. [More info.](https://technet.microsoft.com/en-us/library/bb491010.aspx)
 
@@ -151,7 +160,7 @@ Specify the types of processes to include or exclude. [More info.](https://techn
 
 Type: `boolean`
 
-Displays store apps.  
+Displays store apps.
 Without the `verbose` option, the command returns the following data:
 - `imageName` (Type: `string`)
 - `pid` (Type: `number`)
@@ -166,12 +175,15 @@ const tasklist = require('tasklist');
 (async () => {
 	console.log(await tasklist({apps: true}));
 	/*
-	[{
-		imageName: 'SearchUI.exe (CortanaUI)',
-        pid: 1820,
-        memUsage: 4415488,
-        packageName: 'Microsoft.Windows.Cortana'
-	}, …]
+	[
+		{
+			imageName: 'SearchUI.exe (CortanaUI)',
+	        pid: 1820,
+	        memUsage: 4415488,
+	        packageName: 'Microsoft.Windows.Cortana'
+		},
+		…
+	]
 	*/
 })();
 ```
@@ -194,18 +206,21 @@ const tasklist = require('tasklist');
 (async () => {
 	console.log(await tasklist({apps: true, verbose: true}));
 	/*
-	[{
-		imageName: 'SearchUI.exe (CortanaUI)',
-        pid: 1820,
-        sessionName: 'Console',
-        sessionNumber: 1,
-        memUsage: 4415488,
-        status: 'Running',
-        username: 'SINDRESORHU3930\\sindre'
-        cpuTime: 0,
-        windowTitle: 'N/A',
-        packageName: 'Microsoft.Windows.Cortana'
-	}, …]
+	[
+		{
+			imageName: 'SearchUI.exe (CortanaUI)',
+	        pid: 1820,
+	        sessionName: 'Console',
+	        sessionNumber: 1,
+	        memUsage: 4415488,
+	        status: 'Running',
+	        username: 'SINDRESORHU3930\\sindre'
+	        cpuTime: 0,
+	        windowTitle: 'N/A',
+	        packageName: 'Microsoft.Windows.Cortana'
+		},
+		…
+	]
 	*/
 })();
 ```
@@ -214,8 +229,9 @@ const tasklist = require('tasklist');
 
 Type: `string`
 
-List all tasks using the given DLL module name. If an empty string is given, it will list all tasks with the used DLL modules.  
-**Note:** You can't use the `verbose` option with this option set
+List all tasks using the given DLL module name. If an empty string is given, it will list all tasks with the used DLL modules.
+
+**Note:** You can't use the `verbose` option with this option set.
 
 **Example:**
 
@@ -238,8 +254,8 @@ const tasklist = require('tasklist');
 
 Type: `boolean`
 
-Displays services hosted in each process.  
-**Note:** You can't use the `verbose` option with this option set
+Displays services hosted in each process.
+**Note:** You can't use the `verbose` option with this option set.
 
 **Example:**
 
@@ -261,7 +277,6 @@ const tasklist = require('tasklist');
 ## Related
 
 - [taskkill](https://github.com/sindresorhus/taskkill) - Wrapper for the Windows `taskkill` command
-
 
 ## Maintainers
 

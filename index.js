@@ -107,7 +107,7 @@ function streamInterface(options = {}) {
 	const processOutput = childProcess.spawn('tasklist.exe', args).stdout;
 
 	// Ignore errors originating from stream end
-	const resultStream = pipeline(processOutput, checkEmptyStream, csv.parse({columns}), transform.makeTransform(currentTransform), err => err);
+	const resultStream = pipeline(processOutput, checkEmptyStream, csv.parse({columns}), transform.makeTransform(currentTransform), error => error);
 	resultStream.on('error', error => error);
 	return resultStream;
 }
