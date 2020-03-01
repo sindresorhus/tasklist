@@ -1,7 +1,7 @@
 import {expectType} from 'tsd-check';
 import {Stream} from 'stream';
 import getStream from 'get-stream';
-import * as tasklist from './index';
+import tasklist = require('.');
 
 // Test promise interface types
 expectType<Promise<tasklist.ResultRow[]>>(tasklist());
