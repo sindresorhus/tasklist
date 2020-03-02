@@ -7,11 +7,13 @@ declare namespace tasklist {
 		Make tasklist output more info.
 
 		Note: Can't be used with `modules` or `services` options.
+
 		@default false
 
 		@example
 		```
-		const tasklist = require('tasklist');
+		impoer tasklist = require('tasklist');
+
 		(async () => {
 			console.log(await tasklist({verbose: true}));
 			//=> [{
@@ -36,8 +38,8 @@ declare namespace tasklist {
 		@default false
 
 		@example
-		```js
-		const tasklist = require('tasklist');
+		```
+		import tasklist = require('tasklist');
 
 		(async () => {
 			console.log(await tasklist({apps: true}));
@@ -56,11 +58,12 @@ declare namespace tasklist {
 		List all service information for each process.
 
 		Note: Can't be used with `verbose` or `modules` options.
+
 		@default false
 
 		@example
-		```js
-		const tasklist = require('tasklist');
+		```
+		import tasklist = require('tasklist');
 
 		(async () => {
 			console.log(await tasklist({services: true}));
@@ -78,11 +81,12 @@ declare namespace tasklist {
 		Show tasks that loaded the specified DLL modules.
 
 		Note: Can't be used with `verbose` or `services` options.
+
 		@default undefined
 
 		@example
-		```js
-		const tasklist = require('tasklist');
+		```
+		import tasklist = require('tasklist');
 
 		(async () => {
 			console.log(await tasklist({modules: 'wmiutils.dll'}));
@@ -122,16 +126,17 @@ declare namespace tasklist {
 		Filters to pass to the command.
 
 		Note: Windowtitle and Status parameters can't be used for filtering, when executing on a remote machine.
+
 		@default undefined
 		*/
-		readonly filter?: String[]
+		readonly filter?: readonly String[]
 	};
 
 	interface ResultRow {
 		/**
 		Name of the executed image.
 
-		@default "N/A"
+		@default 'N/A'
 		*/
 		readonly imageName: string;
 
@@ -144,24 +149,27 @@ declare namespace tasklist {
 
 		/**
 		The name of the session the process is running in.
-		
+
 		Note: Available with default options, or with `apps` option if the `verbose` option is set.
-		@default "N/A"
+
+		@default 'N/A'
 		*/
 		readonly sessionName?: string;
 
 		/**
 		The number of the session the process is running in.
-		
+
 		Note: Available with default options, or with `apps` option if the `verbose` option is set.
+
 		@default -1
 		*/
 		readonly sessionNumber?: number;
 
 		/**
 		The memory usage of the process in bytes.
-		
+
 		Note: Only available if the `verbose` option is set.
+
 		@default -1
 		*/
 		readonly memUsage?: number;
@@ -170,7 +178,8 @@ declare namespace tasklist {
 		Status of the process.
 
 		Note: Only available if the `verbose` option is set.
-		@default "N/A"
+
+		@default 'N/A'
 		*/
 		readonly status?: string;
 
@@ -178,7 +187,8 @@ declare namespace tasklist {
 		The name of the user who started the process.
 
 		Note: Only available if the `verbose` option is set.
-		@default "N/A"
+
+		@default 'N/A'
 		*/
 		readonly username?: string;
 
@@ -186,7 +196,8 @@ declare namespace tasklist {
 		CPU time used since the start of the process in seconds.
 
 		Note: Only available if the `verbose` option is set.
-		@default "N/A"
+
+		@default 'N/A'
 		*/
 		readonly cpuTime?: number;
 
@@ -194,7 +205,8 @@ declare namespace tasklist {
 		Title of the process's main window.
 
 		Note: Only available if the `verbose` option is set.
-		@default "N/A"
+
+		@default 'N/A'
 		*/
 		readonly windowTitle?: string;
 
@@ -202,7 +214,8 @@ declare namespace tasklist {
 		The application's package name.
 
 		Note: Only available if the `apps` option has been set.
-		@default "N/A"
+
+		@default 'N/A'
 		*/
 		readonly packageName?: string;
 
@@ -210,23 +223,26 @@ declare namespace tasklist {
 		List of DLLs loaded by the process.
 
 		Note: Only available if the `modules` option has been set.
-		@default ["N/A"]
+
+		@default ['N/A']
 		*/
-		readonly modules?: string[];
+		readonly modules?: readonly string[];
 
 		/**
 		List of services executed by the process.
 
 		Note: Only available if the `services` option has been set.
-		@default ["N/A"]
+
+		@default ['N/A']
 		*/
-		readonly services?: string[];
+		readonly services?: readonly string[];
 	}
 
 	interface ResultStream extends ReadableStream {
 		/**
 		Read results from the stream.
-		@param number - Specify how much data to read
+
+		@param number - How much data to read
 		@returns Lines from the executed command's result.
 		*/
 		read(size?: number): ResultRow;
@@ -240,12 +256,11 @@ declare const tasklist: {
 	/**
 	Execute tasklist.exe with the specified options and return a promise with the results.
 
-	@param options
 	@returns The results of the executed command.
 
 	@example
 	```
-	const tasklist = require('tasklist');
+	import tasklist = require('tasklist');
 
 	(async () => {
 		console.log(await tasklist());
@@ -264,12 +279,12 @@ declare const tasklist: {
 	/**
 	Execute tasklist.exe with the specified options.
 
-	@param options
 	@returns The results of the executed command.
 
 	@example
 	```
-	const tasklist = require('tasklist');
+	import tasklist = require('tasklist');
+
 	tasklist.stream({verbose: true}).pipe(process.stdout);
 	//=> {
 		imageName: 'taskhostex.exe',
@@ -282,7 +297,7 @@ declare const tasklist: {
 		cpuTime: 0,
 		windowTitle: 'Task Host Window'
 	}…
-```
+	```
 	*/
 	stream(options?: tasklist.Options): tasklist.ResultStream;
 }
