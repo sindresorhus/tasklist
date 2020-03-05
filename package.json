@@ -14,7 +14,7 @@
 		"node": ">=10"
 	},
 	"scripts": {
-		"test": "xo && ava && tsd-check"
+		"test": "xo && ava && tsd"
 	},
 	"files": [
 		"index.js",
@@ -36,13 +36,13 @@
 	],
 	"dependencies": {
 		"csv": "^5.1.1",
-		"sec": "^1.0.0"
+		"sec": "^1.0.0",
+		"tsd": "^0.11.0"
 	},
 	"devDependencies": {
 		"@types/node": "^13.7.6",
 		"ava": "^2.1.0",
 		"get-stream": "^5.1.0",
-		"tsd-check": "^0.6.0",
 		"xo": "^0.27.2"
 	},
 	"ava": {

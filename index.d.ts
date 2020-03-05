@@ -28,7 +28,7 @@ declare namespace tasklist {
 		})();
 		```
 		*/
-		readonly verbose?: Boolean
+		readonly verbose?: boolean;
 
 		/**
 		Return store apps.
@@ -50,7 +50,7 @@ declare namespace tasklist {
 		})();
 		```
 		*/
-		readonly apps?: Boolean
+		readonly apps?: boolean;
 
 		/**
 		List all service information for each process.
@@ -72,7 +72,7 @@ declare namespace tasklist {
 		})();
 		```
 		*/
-		readonly services?: Boolean
+		readonly services?: boolean;
 
 		/**
 		Show tasks that loaded the specified DLL modules.
@@ -94,14 +94,14 @@ declare namespace tasklist {
 		})();
 		```
 		*/
-		readonly modules?: String
+		readonly modules?: string;
 
 		/**
 		The IP address or hostname of the remote machine.
 
 		@default undefined
 		*/
-		readonly system?: String
+		readonly system?: string;
 
 		/**
 		The username of the remote machine.
@@ -109,14 +109,14 @@ declare namespace tasklist {
 		@default undefined
 
 		*/
-		readonly username?: String
+		readonly username?: string;
 
 		/**
 		The password of the remote machine.
 
 		@default undefined
 		*/
-		readonly password?: String
+		readonly password?: string;
 
 		/**
 		Filters to pass to the command.
@@ -124,7 +124,7 @@ declare namespace tasklist {
 		Note: Windowtitle and Status parameters can't be used for filtering, when executing on a remote machine.
 		@default undefined
 		*/
-		readonly filter?: String[]
+		readonly filter?: string[]
 	};
 
 	interface ResultRow {

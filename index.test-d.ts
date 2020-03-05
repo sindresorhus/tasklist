@@ -1,5 +1,4 @@
-import {expectType} from 'tsd-check';
-import {Stream} from 'stream';
+import {expectType} from 'tsd';
 import getStream from 'get-stream';
 import * as tasklist from './index';
 
