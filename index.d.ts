@@ -130,8 +130,6 @@ declare namespace tasklist {
 	interface ResultRow {
 		/**
 		Name of the executed image.
-
-		@default "N/A"
 		*/
 		readonly imageName: string;
 
@@ -146,7 +144,7 @@ declare namespace tasklist {
 		The name of the session the process is running in.
 		
 		Note: Available with default options, or with `apps` option if the `verbose` option is set.
-		@default "N/A"
+		@default undefined
 		*/
 		readonly sessionName?: string;
 
@@ -170,7 +168,7 @@ declare namespace tasklist {
 		Status of the process.
 
 		Note: Only available if the `verbose` option is set.
-		@default "N/A"
+		@default undefined
 		*/
 		readonly status?: string;
 
@@ -178,7 +176,7 @@ declare namespace tasklist {
 		The name of the user who started the process.
 
 		Note: Only available if the `verbose` option is set.
-		@default "N/A"
+		@default undefined
 		*/
 		readonly username?: string;
 
@@ -186,7 +184,7 @@ declare namespace tasklist {
 		CPU time used since the start of the process in seconds.
 
 		Note: Only available if the `verbose` option is set.
-		@default "N/A"
+		@default undefined
 		*/
 		readonly cpuTime?: number;
 
@@ -194,7 +192,7 @@ declare namespace tasklist {
 		Title of the process's main window.
 
 		Note: Only available if the `verbose` option is set.
-		@default "N/A"
+		@default undefined
 		*/
 		readonly windowTitle?: string;
 
@@ -202,7 +200,7 @@ declare namespace tasklist {
 		The application's package name.
 
 		Note: Only available if the `apps` option has been set.
-		@default "N/A"
+		@default undefined
 		*/
 		readonly packageName?: string;
 
@@ -210,7 +208,7 @@ declare namespace tasklist {
 		List of DLLs loaded by the process.
 
 		Note: Only available if the `modules` option has been set.
-		@default ["N/A"]
+		@default []
 		*/
 		readonly modules?: string[];
 
@@ -218,7 +216,7 @@ declare namespace tasklist {
 		List of services executed by the process.
 
 		Note: Only available if the `services` option has been set.
-		@default ["N/A"]
+		@default []
 		*/
 		readonly services?: string[];
 	}

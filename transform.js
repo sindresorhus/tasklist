@@ -30,14 +30,21 @@ const appsTransform = task => {
 
 const modulesTransform = task => {
 	task.pid = Number(task.pid);
-	task.modules = task.modules.split(',');
+	if (task.modules === 'N/A') {
+		task.modules = [];
+	} else {
+		task.modules = task.modules.split(',');
+	}
+
 	return task;
 };
 
 const servicesTransform = task => {
 	task.pid = Number(task.pid);
-	if (task.services) {
+	if (task.services && task.services !== 'N/A') {
 		task.services = task.services.split(',');
+	} else {
+		task.services = [];
 	}
 
 	return task;
