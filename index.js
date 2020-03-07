@@ -14,11 +14,13 @@ function getNotFoundText() {
 	const stdout = childProcess.execFileSync('tasklist.exe', ['/v', '/fi', 'PID eq 4', '/nh', '/fo', 'csv']).toString();
 	// Get the window title parameter, trim to remove trailing new line
 	let result;
+
 	try {
-		stdout.split(',')[9].trim();
+		result = stdout.split(',')[9].trim();
 	} catch (_) {
 		throw new Error(`getNotFoundText failed, stdout:\r\n${stdout}`);
 	}
+
 	// Remove quotation marks, from start and end of string
 	result = result.slice(1, -1);
 	return result;
