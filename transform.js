@@ -1,5 +1,10 @@
 const {PassThrough, Transform} = require('stream');
 const sec = require('sec');
+let notFoundText = '';
+
+const setNotFoundText = text => {
+	notFoundText = text;
+};
 
 const makeTransform = convert => new Transform({
 	objectMode: true,
@@ -30,7 +35,7 @@ const appsTransform = task => {
 
 const modulesTransform = task => {
 	task.pid = Number(task.pid);
-	if (task.modules === 'N/A') {
+	if (task.modules === notFoundText) {
 		task.modules = [];
 	} else {
 		task.modules = task.modules.split(',');
@@ -41,7 +46,7 @@ const modulesTransform = task => {
 
 const servicesTransform = task => {
 	task.pid = Number(task.pid);
-	if (task.services && task.services !== 'N/A') {
+	if (task.services && task.services !== notFoundText) {
 		task.services = task.services.split(',');
 	} else {
 		task.services = [];
@@ -76,6 +81,7 @@ module.exports = {
 	passThrough,
 	ReportEmpty,
 	makeTransform,
+	setNotFoundText,
 	transforms: {
 		default: defaultTransform,
 		defaultVerbose: defaultVerboseTransform,

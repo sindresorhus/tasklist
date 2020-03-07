@@ -9,6 +9,16 @@ const csv = require('csv');
 const execFile = promisify(childProcess.execFile);
 const parse = promisify(csv.parse);
 
+function getNotFoundText() {
+	// Get output of the command
+	const stdout = childProcess.execFileSync('tasklist.exe', ['/v', '/fi', 'PID eq 4', '/nh', '/fo', 'csv']).toString();
+	// Get the window title parameter, trim to remove trailing new line
+	let result = stdout.split(',')[9].trim();
+	// Remove quotation marks, from start and end of string
+	result = result.slice(1, -1);
+	return result;
+}
+
 function main(options = {}) {
 	if (process.platform !== 'win32') {
 		throw new Error('Windows only');
@@ -95,6 +105,9 @@ function main(options = {}) {
 	if (options.verbose) {
 		currentHeader += 'Verbose';
 	}
+
+	const notFoundText = getNotFoundText();
+	transform.setNotFoundText(notFoundText);
 
 	const columns = csvHeaders[currentHeader];
 	const currentTransform = transform.transforms[currentHeader];
