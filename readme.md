@@ -1,4 +1,4 @@
-# tasklist [![Build Status](https://travis-ci.org/sindresorhus/tasklist.svg?branch=master)](https://travis-ci.org/sindresorhus/tasklist)
+# tasklist
 
 > Wrapper for the Windows [`tasklist`](https://technet.microsoft.com/en-us/library/bb491010.aspx) command. Returns a list of apps and services with their Process ID (PID) for all tasks running on either a local or a remote computer.
 
