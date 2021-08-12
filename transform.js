@@ -1,30 +1,30 @@
-const {PassThrough, Transform} = require('stream');
-const sec = require('sec');
+import {PassThrough as PassThroughStream, Transform as TransformStream} from 'node:stream';
+import sec from 'sec';
 
-const makeTransform = convert => new Transform({
+const makeTransform = convert => new TransformStream({
 	objectMode: true,
 	transform: (task, _, callback) =>
-		callback(null, convert(task))
+		callback(null, convert(task)),
 });
 
 const defaultTransform = task => {
 	task.pid = Number(task.pid);
 	task.sessionNumber = Number(task.sessionNumber);
-	task.memUsage = Number(task.memUsage.replace(/[^\d]/g, '')) * 1024;
+	task.memUsage = Number(task.memUsage.replace(/\D/g, '')) * 1024;
 	return task;
 };
 
 const defaultVerboseTransform = task => {
 	task.pid = Number(task.pid);
 	task.sessionNumber = Number(task.sessionNumber);
-	task.memUsage = Number(task.memUsage.replace(/[^\d]/g, '')) * 1024;
+	task.memUsage = Number(task.memUsage.replace(/\D/g, '')) * 1024;
 	task.cpuTime = sec(task.cpuTime);
 	return task;
 };
 
 const appsTransform = task => {
 	task.pid = Number(task.pid);
-	task.memUsage = Number(task.memUsage.replace(/[^\d]/g, '')) * 1024;
+	task.memUsage = Number(task.memUsage.replace(/\D/g, '')) * 1024;
 	return task;
 };
 
@@ -43,7 +43,7 @@ const servicesTransform = task => {
 	return task;
 };
 
-const passThrough = () => new PassThrough({objectMode: true});
+const passThrough = () => new PassThroughStream({objectMode: true});
 
 class ReportEmpty {
 	constructor() {
@@ -51,7 +51,7 @@ class ReportEmpty {
 	}
 
 	getTransform() {
-		return new Transform({
+		return new TransformStream({
 			transform: (input, _, callback) => {
 				const stringInput = input.toString();
 				if (!stringInput.startsWith('"') && !this.checked) {
@@ -60,12 +60,12 @@ class ReportEmpty {
 					callback(null, input);
 					this.checked = true;
 				}
-			}
+			},
 		});
 	}
 }
 
-module.exports = {
+const transform = {
 	passThrough,
 	ReportEmpty,
 	makeTransform,
@@ -75,6 +75,8 @@ module.exports = {
 		apps: appsTransform,
 		appsVerbose: defaultVerboseTransform,
 		modules: modulesTransform,
-		services: servicesTransform
-	}
+		services: servicesTransform,
+	},
 };
+
+export default transform;

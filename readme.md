@@ -11,24 +11,23 @@ $ npm install tasklist
 ```
 
 ## Usage
-```js
-const tasklist = require('tasklist');
 
-(async () => {
-	console.log(await tasklist());
-	/*
-	[
-		{
-			imageName: 'taskhostex.exe',
-			pid: 1820,
-			sessionName: 'Console',
-			sessionNumber: 1,
-			memUsage: 4415488
-		},
-		…
-	]
-	*/
-})();
+```js
+import {tasklist} from 'tasklist';
+
+console.log(await tasklist());
+/*
+[
+	{
+		imageName: 'taskhostex.exe',
+		pid: 1820,
+		sessionName: 'Console',
+		sessionNumber: 1,
+		memUsage: 4415488
+	},
+	…
+]
+*/
 ```
 
 ## API
@@ -41,18 +40,16 @@ Returns a `Promise<object[]>` that contains the normalized results of the comman
 
 Examples for `options` below will use this interface, but you can check `tasklist.stream` below for usage of the stream interface.
 
-### tasklist.stream(options?)
+### tasklistStream(options?)
 
 Returns a `stream.Readable` that returns the resulting lines, normalized, one-by-one.
 
 Options are the same as the Promise interface.
 
-**Example using stream interface**
-
 ```js
-const tasklist = require('tasklist');
+import {tasklistStream} from 'tasklist';
 
-tasklist.stream({verbose: true}).pipe(process.stdout);
+tasklistStream({verbose: true}).pipe(process.stdout);
 /*
 {
     imageName: 'taskhostex.exe',
@@ -74,10 +71,10 @@ tasklist.stream({verbose: true}).pipe(process.stdout);
 Type: `object`
 
 **Warning**
-The `system`, `username`, `password` options must be specified together.
-The `modules` and `services` options can't be specified if verbose is set to `true`.
-The `modules` and `services` options can't be specified at the same time.
-When `system`, `username`, `password` options are specified, the filter option can't have `windowtitle` and `status` as the parameter.
+- The `system`, `username`, `password` options must be specified together.
+- The `modules` and `services` options can't be specified if verbose is set to `true`.
+- The `modules` and `services` options can't be specified at the same time.
+- When `system`, `username`, `password` options are specified, the filter option can't have `windowtitle` and `status` as the parameter.
 
 ##### verbose
 
@@ -106,27 +103,25 @@ With the `verbose` option set to `true` but the `apps` option still set to `fals
 **Verbose example:**
 
 ```js
-const tasklist = require('tasklist');
+import {tasklist} from 'tasklist';
 
-(async () => {
-	console.log(await tasklist({verbose: true}));
-	/*
-	[
-		{
-			imageName: 'taskhostex.exe',
-	        pid: 1820,
-	        sessionName: 'Console',
-	        sessionNumber: 1,
-	        memUsage: 4415488,
-	        status: 'Running',
-	        username: 'SINDRESORHU3930\\sindre'
-	        cpuTime: 0,
-	        windowTitle: 'Task Host Window'
-		},
-		…
-	]
-	*/
-})();
+console.log(await tasklist({verbose: true}));
+/*
+[
+	{
+		imageName: 'taskhostex.exe',
+        pid: 1820,
+        sessionName: 'Console',
+        sessionNumber: 1,
+        memUsage: 4415488,
+        status: 'Running',
+        username: 'SINDRESORHU3930\\sindre'
+        cpuTime: 0,
+        windowTitle: 'Task Host Window'
+	},
+	…
+]
+*/
 ```
 
 **Warning:** Using the `verbose` option may have a considerable performance impact (See: [#6](https://github.com/sindresorhus/tasklist/issues/6)).
@@ -167,25 +162,21 @@ Without the `verbose` option, the command returns the following data:
 - `memUsage` in bytes (Type: `number`)
 - `packageName` (Type: `string`)
 
-**Example:**
-
 ```js
-const tasklist = require('tasklist');
+import {tasklist} from 'tasklist';
 
-(async () => {
-	console.log(await tasklist({apps: true}));
-	/*
-	[
-		{
-			imageName: 'SearchUI.exe (CortanaUI)',
-	        pid: 1820,
-	        memUsage: 4415488,
-	        packageName: 'Microsoft.Windows.Cortana'
-		},
-		…
-	]
-	*/
-})();
+console.log(await tasklist({apps: true}));
+/*
+[
+	{
+		imageName: 'SearchUI.exe (CortanaUI)',
+        pid: 1820,
+        memUsage: 4415488,
+        packageName: 'Microsoft.Windows.Cortana'
+	},
+	…
+]
+*/
 ```
 
 With the `verbose` option set to `true`, the command additionally returns the following data:
@@ -201,28 +192,26 @@ With the `verbose` option set to `true`, the command additionally returns the fo
 **Verbose example:**
 
 ```js
-const tasklist = require('tasklist');
+import {tasklist} from 'tasklist';
 
-(async () => {
-	console.log(await tasklist({apps: true, verbose: true}));
-	/*
-	[
-		{
-			imageName: 'SearchUI.exe (CortanaUI)',
-	        pid: 1820,
-	        sessionName: 'Console',
-	        sessionNumber: 1,
-	        memUsage: 4415488,
-	        status: 'Running',
-	        username: 'SINDRESORHU3930\\sindre'
-	        cpuTime: 0,
-	        windowTitle: 'N/A',
-	        packageName: 'Microsoft.Windows.Cortana'
-		},
-		…
-	]
-	*/
-})();
+console.log(await tasklist({apps: true, verbose: true}));
+/*
+[
+	{
+		imageName: 'SearchUI.exe (CortanaUI)',
+        pid: 1820,
+        sessionName: 'Console',
+        sessionNumber: 1,
+        memUsage: 4415488,
+        status: 'Running',
+        username: 'SINDRESORHU3930\\sindre'
+        cpuTime: 0,
+        windowTitle: 'N/A',
+        packageName: 'Microsoft.Windows.Cortana'
+	},
+	…
+]
+*/
 ```
 
 ##### modules
@@ -233,21 +222,17 @@ List all tasks using the given DLL module name. If an empty string is given, it 
 
 **Note:** You can't use the `verbose` option with this option set.
 
-**Example:**
-
 ```js
-const tasklist = require('tasklist');
+import {tasklist} from 'tasklist';
 
-(async () => {
-	console.log(await tasklist({modules: 'wmiutils.dll'}));
-	/*
-	[{
-		imageName: 'chrome.exe',
-        pid: 1820,
-        modules: ['wmiutils.dll']
-	}, …]
-	*/
-})();
+console.log(await tasklist({modules: 'wmiutils.dll'}));
+/*
+[{
+	imageName: 'chrome.exe',
+    pid: 1820,
+    modules: ['wmiutils.dll']
+}, …]
+*/
 ```
 
 ##### services
@@ -257,21 +242,17 @@ Type: `boolean`
 Displays services hosted in each process.
 **Note:** You can't use the `verbose` option with this option set.
 
-**Example:**
-
 ```js
-const tasklist = require('tasklist');
+import {tasklist} from 'tasklist';
 
-(async () => {
-	console.log(await tasklist({services: true}));
-	/*
-	[{
-		imageName: 'lsass.exe',
-        pid: 856,
-        services: ['KeyIso', 'SamSs', 'VaultSvc']
-	}, …]
-	*/
-})();
+console.log(await tasklist({services: true}));
+/*
+[{
+	imageName: 'lsass.exe',
+    pid: 856,
+    services: ['KeyIso', 'SamSs', 'VaultSvc']
+}, …]
+*/
 ```
 
 ## Related

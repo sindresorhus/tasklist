@@ -1,10 +1,10 @@
-'use strict';
-const childProcess = require('child_process');
-const {promisify} = require('util');
-const {pipeline} = require('stream');
-const csvHeaders = require('./csv-headers');
-const transform = require('./transform');
-const csv = require('csv');
+import childProcess from 'node:child_process';
+import {promisify} from 'node:util';
+import {pipeline} from 'node:stream';
+import process from 'node:process';
+import csv from 'csv';
+import csvHeaders from './csv-headers.js';
+import transform from './transform.js';
 
 const execFile = promisify(childProcess.execFile);
 const parse = promisify(csv.parse);
@@ -23,12 +23,12 @@ function main(options = {}) {
 	}
 
 	// Check if system, username and password is specified together
-	const remoteParams = [options.system, options.username, options.password];
+	const remoteParameters = [options.system, options.username, options.password];
 	let isRemote;
-	if (remoteParams.every(value => value === undefined)) {
+	if (remoteParameters.every(value => value === undefined)) {
 		// All params are undefined
 		isRemote = false;
-	} else if (remoteParams.some(value => value === undefined)) {
+	} else if (remoteParameters.includes(undefined)) {
 		// Some, but not all of the params are undefined
 		throw new Error('The System, Username and Password options must be specified together');
 	} else {
@@ -37,12 +37,12 @@ function main(options = {}) {
 
 	// Check for unsupported filters on remote machines
 	if (Array.isArray(options.filter) && isRemote) {
-		options.filter.forEach(filter => {
+		for (const filter of options.filter) {
 			const parameter = filter.split(' ')[0].toLowerCase();
 			if (parameter === 'windowtitle' || parameter === 'status') {
 				throw new Error('Windowtitle and Status parameters for filtering are not supported when querying remote machines');
 			}
-		});
+		}
 	}
 
 	// Populate args
@@ -71,7 +71,7 @@ function main(options = {}) {
 		args.push(
 			'/s', options.system,
 			'/u', options.username,
-			'/p', options.password
+			'/p', options.password,
 		);
 	}
 
@@ -101,18 +101,7 @@ function main(options = {}) {
 	return {args, columns, currentTransform};
 }
 
-function streamInterface(options = {}) {
-	const {args, columns, currentTransform} = main(options);
-	const checkEmptyStream = new transform.ReportEmpty().getTransform();
-	const processOutput = childProcess.spawn('tasklist.exe', args).stdout;
-
-	// Ignore errors originating from stream end
-	const resultStream = pipeline(processOutput, checkEmptyStream, csv.parse({columns}), transform.makeTransform(currentTransform), error => error);
-	resultStream.on('error', error => error);
-	return resultStream;
-}
-
-async function promiseInterface(options = {}) {
+export async function tasklist(options = {}) {
 	const {args, columns, currentTransform} = main(options);
 	const {stdout} = await execFile('tasklist.exe', args);
 	if (!stdout.startsWith('"')) {
@@ -124,5 +113,13 @@ async function promiseInterface(options = {}) {
 	return records;
 }
 
-module.exports = promiseInterface;
-module.exports.stream = streamInterface;
+export function tasklistStream(options = {}) {
+	const {args, columns, currentTransform} = main(options);
+	const checkEmptyStream = new transform.ReportEmpty().getTransform();
+	const processOutput = childProcess.spawn('tasklist.exe', args).stdout;
+
+	// Ignore errors originating from stream end
+	const resultStream = pipeline(processOutput, checkEmptyStream, csv.parse({columns}), transform.makeTransform(currentTransform), error => error);
+	resultStream.on('error', error => error);
+	return resultStream;
+}

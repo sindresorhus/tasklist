@@ -1,6 +1,6 @@
 import test from 'ava';
 import getStream from 'get-stream';
-import tasklist from '..';
+import {tasklistStream} from '../index.js';
 
 const hasDefaultTaskProps = (t, task) => {
 	t.is(typeof task.imageName, 'string');
@@ -61,28 +61,24 @@ const hasServicesProps = (t, task) => {
 	t.true(Array.isArray(task.services));
 };
 
-const _call = opts => {
-	return new Promise((resolve, reject) => {
-		try {
-			const apiStream = tasklist.stream(opts);
-			resolve(getStream.array(apiStream));
-		} catch (error) {
-			reject(error);
-		}
-	});
-};
+const _call = options => new Promise((resolve, reject) => {
+	try {
+		const apiStream = tasklistStream(options);
+		resolve(getStream.array(apiStream));
+	} catch (error) {
+		reject(error);
+	}
+});
 
-const _callAndClose = opts => {
-	return new Promise((resolve, reject) => {
-		try {
-			const apiStream = tasklist.stream(opts);
-			apiStream.on('data', () => apiStream.end());
-			apiStream.on('end', () => resolve());
-		} catch (error) {
-			reject(error);
-		}
-	});
-};
+const _callAndClose = options => new Promise((resolve, reject) => {
+	try {
+		const apiStream = tasklistStream(options);
+		apiStream.on('data', () => apiStream.end());
+		apiStream.on('end', () => resolve());
+	} catch (error) {
+		reject(error);
+	}
+});
 
 const macro = async (t, options) => {
 	const tasks = await _call(options);
@@ -144,7 +140,7 @@ test('services', async t => {
 
 test('test handle no matching tasks gracefully', async t => {
 	const tasks = await _call({
-		filter: ['imagename eq does-not-exist']
+		filter: ['imagename eq does-not-exist'],
 	});
 	t.is(tasks.length, 0);
 });

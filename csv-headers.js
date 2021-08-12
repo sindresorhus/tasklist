@@ -1,12 +1,10 @@
-'use strict';
-
-module.exports = {
+const csvHeaders = {
 	default: [
 		'imageName',
 		'pid',
 		'sessionName',
 		'sessionNumber',
-		'memUsage'
+		'memUsage',
 	],
 	defaultVerbose: [
 		'imageName',
@@ -17,13 +15,13 @@ module.exports = {
 		'status',
 		'username',
 		'cpuTime',
-		'windowTitle'
+		'windowTitle',
 	],
 	apps: [
 		'imageName',
 		'pid',
 		'memUsage',
-		'packageName'
+		'packageName',
 	],
 	appsVerbose: [
 		'imageName',
@@ -35,16 +33,18 @@ module.exports = {
 		'username',
 		'cpuTime',
 		'windowTitle',
-		'packageName'
+		'packageName',
 	],
 	modules: [
 		'imageName',
 		'pid',
-		'modules'
+		'modules',
 	],
 	services: [
 		'imageName',
 		'pid',
-		'services'
-	]
+		'services',
+	],
 };
+
+export default csvHeaders;

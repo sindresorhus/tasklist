@@ -1,5 +1,5 @@
 import test from 'ava';
-import tasklist from '..';
+import {tasklist} from '../index.js';
 
 const hasDefaultTaskProps = (t, task) => {
 	t.is(typeof task.imageName, 'string');
@@ -120,7 +120,7 @@ test('services', async t => {
 
 test('test handle no matching tasks gracefully', async t => {
 	const tasks = await tasklist({
-		filter: ['imagename eq does-not-exist']
+		filter: ['imagename eq does-not-exist'],
 	});
 	t.is(tasks.length, 0);
 });
