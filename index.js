@@ -18,6 +18,10 @@ function main(options = {}) {
 		throw new Error('Verbose option is invalid when Services or Modules option is set');
 	}
 
+	if (options.apps === true && (options.services === true || options.modules !== undefined)) {
+		throw new Error('Apps option is invalid when Services or Modules option is set');
+	}
+
 	if (options.modules !== undefined && options.services === true) {
 		throw new Error('The Services and Modules options can\'t be used together');
 	}
@@ -109,7 +113,10 @@ export async function tasklist(options = {}) {
 	}
 
 	const records = await parse(stdout, {columns});
-	records.map(task => currentTransform(task));
+	for (const task of records) {
+		currentTransform(task);
+	}
+
 	return records;
 }
 
@@ -120,6 +127,6 @@ export function tasklistStream(options = {}) {
 
 	// Ignore errors originating from stream end
 	const resultStream = pipeline(processOutput, checkEmptyStream, csv.parse({columns}), transform.makeTransform(currentTransform), error => error);
-	resultStream.on('error', error => error);
+	resultStream.on('error', () => {});
 	return resultStream;
 }

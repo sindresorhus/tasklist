@@ -6,8 +6,8 @@ Cleans up and normalizes the data.
 
 ## Install
 
-```
-$ npm install tasklist
+```sh
+npm install tasklist
 ```
 
 ## Usage
@@ -25,7 +25,7 @@ console.log(await tasklist());
 		sessionNumber: 1,
 		memUsage: 4415488
 	},
-	…
+	...
 ]
 */
 ```
@@ -38,11 +38,11 @@ See the [`tasklist` docs](https://technet.microsoft.com/en-us/library/bb491010.a
 
 Returns a `Promise<object[]>` that contains the normalized results of the command output.
 
-Examples for `options` below will use this interface, but you can check `tasklist.stream` below for usage of the stream interface.
+Examples for `options` below will use this interface, but you can check `tasklistStream` below for usage of the stream interface.
 
 ### tasklistStream(options?)
 
-Returns a `stream.Readable` that returns the resulting lines, normalized, one-by-one.
+Returns a `stream.Readable` that returns the resulting lines, normalized, one by one.
 
 Options are the same as the Promise interface.
 
@@ -52,17 +52,17 @@ import {tasklistStream} from 'tasklist';
 tasklistStream({verbose: true}).pipe(process.stdout);
 /*
 {
-    imageName: 'taskhostex.exe',
-    pid: 1820,
-    sessionName: 'Console',
-    sessionNumber: 1,
-    memUsage: 4415488,
-    status: 'Running',
-    username: 'SINDRESORHU3930\\sindre'
-    cpuTime: 0,
-    windowTitle: 'Task Host Window'
+	imageName: 'taskhostex.exe',
+	pid: 1820,
+	sessionName: 'Console',
+	sessionNumber: 1,
+	memUsage: 4415488,
+	status: 'Running',
+	username: 'SINDRESORHU3930\\sindre',
+	cpuTime: 0,
+	windowTitle: 'Task Host Window'
 }
-…
+...
 */
 ```
 
@@ -74,6 +74,7 @@ Type: `object`
 - The `system`, `username`, `password` options must be specified together.
 - The `modules` and `services` options can't be specified if verbose is set to `true`.
 - The `modules` and `services` options can't be specified at the same time.
+- The `apps` option can't be specified with `modules` or `services`.
 - When `system`, `username`, `password` options are specified, the filter option can't have `windowtitle` and `status` as the parameter.
 
 ##### verbose
@@ -110,16 +111,16 @@ console.log(await tasklist({verbose: true}));
 [
 	{
 		imageName: 'taskhostex.exe',
-        pid: 1820,
-        sessionName: 'Console',
-        sessionNumber: 1,
-        memUsage: 4415488,
-        status: 'Running',
-        username: 'SINDRESORHU3930\\sindre'
-        cpuTime: 0,
-        windowTitle: 'Task Host Window'
+		pid: 1820,
+		sessionName: 'Console',
+		sessionNumber: 1,
+		memUsage: 4415488,
+		status: 'Running',
+		username: 'SINDRESORHU3930\\sindre',
+		cpuTime: 0,
+		windowTitle: 'Task Host Window'
 	},
-	…
+	...
 ]
 */
 ```
@@ -156,7 +157,9 @@ Specify the types of processes to include or exclude. [More info.](https://techn
 Type: `boolean`
 
 Displays store apps.
+
 Without the `verbose` option, the command returns the following data:
+
 - `imageName` (Type: `string`)
 - `pid` (Type: `number`)
 - `memUsage` in bytes (Type: `number`)
@@ -170,16 +173,17 @@ console.log(await tasklist({apps: true}));
 [
 	{
 		imageName: 'SearchUI.exe (CortanaUI)',
-        pid: 1820,
-        memUsage: 4415488,
-        packageName: 'Microsoft.Windows.Cortana'
+		pid: 1820,
+		memUsage: 4415488,
+		packageName: 'Microsoft.Windows.Cortana'
 	},
-	…
+	...
 ]
 */
 ```
 
 With the `verbose` option set to `true`, the command additionally returns the following data:
+
 - `sessionName` (Type: `string`)
 - `sessionNumber` (Type: `number`)
 - `status` (Type: `string`): One of `Running`, `Suspended`, `Not Responding`, or `Unknown`
@@ -199,17 +203,17 @@ console.log(await tasklist({apps: true, verbose: true}));
 [
 	{
 		imageName: 'SearchUI.exe (CortanaUI)',
-        pid: 1820,
-        sessionName: 'Console',
-        sessionNumber: 1,
-        memUsage: 4415488,
-        status: 'Running',
-        username: 'SINDRESORHU3930\\sindre'
-        cpuTime: 0,
-        windowTitle: 'N/A',
-        packageName: 'Microsoft.Windows.Cortana'
+		pid: 1820,
+		sessionName: 'Console',
+		sessionNumber: 1,
+		memUsage: 4415488,
+		status: 'Running',
+		username: 'SINDRESORHU3930\\sindre',
+		cpuTime: 0,
+		windowTitle: 'N/A',
+		packageName: 'Microsoft.Windows.Cortana'
 	},
-	…
+	...
 ]
 */
 ```
@@ -229,9 +233,9 @@ console.log(await tasklist({modules: 'wmiutils.dll'}));
 /*
 [{
 	imageName: 'chrome.exe',
-    pid: 1820,
-    modules: ['wmiutils.dll']
-}, …]
+	pid: 1820,
+	modules: ['wmiutils.dll']
+}, ...]
 */
 ```
 
@@ -240,6 +244,7 @@ console.log(await tasklist({modules: 'wmiutils.dll'}));
 Type: `boolean`
 
 Displays services hosted in each process.
+
 **Note:** You can't use the `verbose` option with this option set.
 
 ```js
@@ -249,9 +254,9 @@ console.log(await tasklist({services: true}));
 /*
 [{
 	imageName: 'lsass.exe',
-    pid: 856,
-    services: ['KeyIso', 'SamSs', 'VaultSvc']
-}, …]
+	pid: 856,
+	services: ['KeyIso', 'SamSs', 'VaultSvc']
+}, ...]
 */
 ```
 
