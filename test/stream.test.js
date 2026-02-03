@@ -1,5 +1,5 @@
 import test from 'ava';
-import getStream from 'get-stream';
+import {getStreamAsArray} from 'get-stream';
 import {tasklistStream} from '../index.js';
 
 const hasDefaultTaskProps = (t, task) => {
@@ -64,7 +64,7 @@ const hasServicesProps = (t, task) => {
 const _call = options => new Promise((resolve, reject) => {
 	try {
 		const apiStream = tasklistStream(options);
-		resolve(getStream.array(apiStream));
+		resolve(getStreamAsArray(apiStream));
 	} catch (error) {
 		reject(error);
 	}
@@ -73,8 +73,20 @@ const _call = options => new Promise((resolve, reject) => {
 const _callAndClose = options => new Promise((resolve, reject) => {
 	try {
 		const apiStream = tasklistStream(options);
-		apiStream.on('data', () => apiStream.end());
-		apiStream.on('end', () => resolve());
+		let isResolved = false;
+
+		const resolveOnce = () => {
+			if (isResolved) {
+				return;
+			}
+
+			isResolved = true;
+			resolve();
+		};
+
+		apiStream.once('end', resolveOnce);
+		apiStream.once('close', resolveOnce);
+		apiStream.once('data', () => apiStream.destroy());
 	} catch (error) {
 		reject(error);
 	}

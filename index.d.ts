@@ -180,26 +180,25 @@ type OptionsBase = {
 
 	Verbose example:
 
+	@example
 	```
 	import {tasklist} from 'tasklist';
 
 	console.log(await tasklist({verbose: true}));
-	/*
-	[
-		{
-			imageName: 'taskhostex.exe',
-			pid: 1820,
-			sessionName: 'Console',
-			sessionNumber: 1,
-			memUsage: 4415488,
-			status: 'Running',
-			username: 'SINDRESORHU3930\\sindre',
-			cpuTime: 0,
-			windowTitle: 'Task Host Window'
-		},
-		...
-	]
-	*/
+	// [
+	// 	{
+	// 		imageName: 'taskhostex.exe',
+	// 		pid: 1820,
+	// 		sessionName: 'Console',
+	// 		sessionNumber: 1,
+	// 		memUsage: 4415488,
+	// 		status: 'Running',
+	// 		username: 'SINDRESORHU3930\\sindre',
+	// 		cpuTime: 0,
+	// 		windowTitle: 'Task Host Window'
+	// 	},
+	// 	...
+	// ]
 	```
 
 	Warning: Using the `verbose` option may have a considerable performance impact (See: [#6](https://github.com/sindresorhus/tasklist/issues/6)).
@@ -240,21 +239,20 @@ type OptionsBase = {
 	- `memUsage` in bytes (Type: `number`)
 	- `packageName` (Type: `string`)
 
+	@example
 	```
 	import {tasklist} from 'tasklist';
 
 	console.log(await tasklist({apps: true}));
-	/*
-	[
-		{
-			imageName: 'SearchUI.exe (CortanaUI)',
-			pid: 1820,
-			memUsage: 4415488,
-			packageName: 'Microsoft.Windows.Cortana'
-		},
-		...
-	]
-	*/
+	// [
+	// 	{
+	// 		imageName: 'SearchUI.exe (CortanaUI)',
+	// 		pid: 1820,
+	// 		memUsage: 4415488,
+	// 		packageName: 'Microsoft.Windows.Cortana'
+	// 	},
+	// 	...
+	// ]
 	```
 
 	With the `verbose` option set to `true`, the command additionally returns the following data:
@@ -270,27 +268,26 @@ type OptionsBase = {
 
 	Verbose example:
 
+	@example
 	```
 	import {tasklist} from 'tasklist';
 
 	console.log(await tasklist({apps: true, verbose: true}));
-	/*
-	[
-		{
-			imageName: 'SearchUI.exe (CortanaUI)',
-			pid: 1820,
-			sessionName: 'Console',
-			sessionNumber: 1,
-			memUsage: 4415488,
-			status: 'Running',
-			username: 'SINDRESORHU3930\\sindre',
-			cpuTime: 0,
-			windowTitle: 'N/A',
-			packageName: 'Microsoft.Windows.Cortana'
-		},
-		...
-	]
-	*/
+	// [
+	// 	{
+	// 		imageName: 'SearchUI.exe (CortanaUI)',
+	// 		pid: 1820,
+	// 		sessionName: 'Console',
+	// 		sessionNumber: 1,
+	// 		memUsage: 4415488,
+	// 		status: 'Running',
+	// 		username: 'SINDRESORHU3930\\sindre',
+	// 		cpuTime: 0,
+	// 		windowTitle: 'N/A',
+	// 		packageName: 'Microsoft.Windows.Cortana'
+	// 	},
+	// 	...
+	// ]
 	```
 
 	@default false
@@ -302,19 +299,12 @@ type OptionsBase = {
 
 	Note: You can't use the `verbose` option with this option set.
 
-	Example:
-
+	@example
 	```
 	import {tasklist} from 'tasklist';
 
 	console.log(await tasklist({modules: 'wmiutils.dll'}));
-	/*
-	[{
-		imageName: 'chrome.exe',
-		pid: 1820,
-		modules: ['wmiutils.dll']
-	}, ...]
-	*/
+	// [{imageName: 'chrome.exe', pid: 1820, modules: ['wmiutils.dll']}, ...]
 	```
 	*/
 	readonly modules?: string;
@@ -324,19 +314,12 @@ type OptionsBase = {
 
 	Note: You can't use the `verbose` option with this option set.
 
-	Example:
-
+	@example
 	```
 	import {tasklist} from 'tasklist';
 
 	console.log(await tasklist({services: true}));
-	/*
-	[{
-		imageName: 'lsass.exe',
-		pid: 856,
-		services: ['KeyIso', 'SamSs', 'VaultSvc']
-	}, ...]
-	*/
+	// [{imageName: 'lsass.exe', pid: 856, services: ['KeyIso', 'SamSs', 'VaultSvc']}, ...]
 	```
 	*/
 	readonly services?: boolean;
@@ -408,18 +391,16 @@ Cleans up and normalizes the data.
 import {tasklist} from 'tasklist';
 
 console.log(await tasklist());
-/*
-[
-	{
-		imageName: 'taskhostex.exe',
-		pid: 1820,
-		sessionName: 'Console',
-		sessionNumber: 1,
-		memUsage: 4415488
-	},
-	...
-]
-*/
+// [
+// 	{
+// 		imageName: 'taskhostex.exe',
+// 		pid: 1820,
+// 		sessionName: 'Console',
+// 		sessionNumber: 1,
+// 		memUsage: 4415488
+// 	},
+// 	...
+// ]
 ```
 */
 export function tasklist(options?: DefaultOptions): Promise<DefaultTask[]>;
@@ -442,20 +423,18 @@ Options are the same as the Promise interface.
 import {tasklistStream} from 'tasklist';
 
 tasklistStream({verbose: true}).pipe(process.stdout);
-/*
-{
-	imageName: 'taskhostex.exe',
-	pid: 1820,
-	sessionName: 'Console',
-	sessionNumber: 1,
-	memUsage: 4415488,
-	status: 'Running',
-	username: 'SINDRESORHU3930\\sindre',
-	cpuTime: 0,
-	windowTitle: 'Task Host Window'
-}
-...
-*/
+// {
+// 	imageName: 'taskhostex.exe',
+// 	pid: 1820,
+// 	sessionName: 'Console',
+// 	sessionNumber: 1,
+// 	memUsage: 4415488,
+// 	status: 'Running',
+// 	username: 'SINDRESORHU3930\\sindre',
+// 	cpuTime: 0,
+// 	windowTitle: 'Task Host Window'
+// }
+// ...
 ```
 */
 export function tasklistStream(options?: DefaultOptions): ReadableStream;

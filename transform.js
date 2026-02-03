@@ -10,21 +10,21 @@ const makeTransform = convert => new TransformStream({
 const defaultTransform = task => {
 	task.pid = Number(task.pid);
 	task.sessionNumber = Number(task.sessionNumber);
-	task.memUsage = Number(task.memUsage.replace(/\D/g, '')) * 1024;
+	task.memUsage = Number(task.memUsage.replaceAll(/\D/g, '')) * 1024;
 	return task;
 };
 
 const defaultVerboseTransform = task => {
 	task.pid = Number(task.pid);
 	task.sessionNumber = Number(task.sessionNumber);
-	task.memUsage = Number(task.memUsage.replace(/\D/g, '')) * 1024;
+	task.memUsage = Number(task.memUsage.replaceAll(/\D/g, '')) * 1024;
 	task.cpuTime = sec(task.cpuTime);
 	return task;
 };
 
 const appsTransform = task => {
 	task.pid = Number(task.pid);
-	task.memUsage = Number(task.memUsage.replace(/\D/g, '')) * 1024;
+	task.memUsage = Number(task.memUsage.replaceAll(/\D/g, '')) * 1024;
 	return task;
 };
 
@@ -36,9 +36,7 @@ const modulesTransform = task => {
 
 const servicesTransform = task => {
 	task.pid = Number(task.pid);
-	if (task.services) {
-		task.services = task.services.split(',');
-	}
+	task.services &&= task.services.split(',');
 
 	return task;
 };

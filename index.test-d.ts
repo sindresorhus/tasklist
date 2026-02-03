@@ -13,7 +13,7 @@ import {
 	type VerboseTask,
 } from './index.js';
 
-const options: Options = {verbose: true};
+declare const options: Options;
 
 expectType<Promise<DefaultTask[]>>(tasklist());
 expectType<Promise<DefaultTask[]>>(tasklist({}));
