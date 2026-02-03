@@ -1,6 +1,6 @@
 {
 	"name": "tasklist",
-	"version": "5.0.0",
+	"version": "6.0.0",
 	"description": "Wrapper for the Windows `tasklist` command. Returns a list of apps and services with their Process ID (PID) for all tasks running on either a local or a remote computer.",
 	"license": "MIT",
 	"repository": "sindresorhus/tasklist",
